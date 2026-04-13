@@ -1,26 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+:root{
+  --yellow-100: #DAB212;
+  --yellow-80: #DFBD35;
+  --yellow-60: #E7C85D;
+  --yellow-40: #EBD47B;
+  --yellow-20: #F0E1A3;
+
+  --light-blue-100: #328BC3;
+  --light-blue-80: #5199CE;
+  --light-blue-60: #70AFD8;
+  --light-blue-40: #8EC0DF;
+  --light-blue-20: #ACD2E9;
+
+  --dark-blue-100: #0D3B5D;
+  --dark-blue-80: #375B77;
+  --dark-blue-60: #618094;
+  --dark-blue-40: #8EA1B2;
+  --dark-blue-20: #B7C4D3;
+
+  --gray-100: #3E4863;
+  --gray-80: #59647A;
+  --gray-60: #75818F;
+  --gray-40: #8A96A3;
+  --gray-20: #A6B7CB;
+
+  --neutral-100: #171616;
+  --neutral-80: #454545;
+  --neutral-60: #747373;
+  --neutral-40: #A2A2A2;
+  --neutral-20: #D1D0D0;
+
+  --success-1: #2DAC3E;
+  --success-2: #ABDEB1;
+
+  --error-1: #DE3737;
+  --error-2: #FFD2D2;
+  
+  --warning-1: #E1CF36;
+  --warning-2: #FFFACB;
+
+  --font-roboto: 'Roboto', sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+    display: flex;
+    flex-direction: column;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--neutral-100);
+  background:white;
+  font-family: var(--font-roboto);
 }
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::-webkit-scrollbar{
+    width: 8px;
+    background-color: var(--dark-blue-40);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--dark-blue-100);
+  border-radius: 10px;
+}
+

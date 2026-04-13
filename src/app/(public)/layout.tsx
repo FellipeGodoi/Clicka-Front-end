@@ -1,0 +1,20 @@
+import Header from '@/components/header/Header'
+import Footer from '@/components/footer/Footer'
+
+export default function PublicLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <>
+      <Header />
+
+      <main style={{ marginTop: 60, display: 'flex', justifyContent: 'center' }}>
+        {children}
+      </main>
+
+      <Footer />
+    </>
+  )
+}

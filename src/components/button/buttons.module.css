@@ -1,0 +1,32 @@
+.base {
+  width: 100%;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-roboto);
+  font-weight: 600;
+
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.base::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.2);
+  opacity: 0;
+
+  transition: opacity 0.2s ease;
+}
+
+.base:hover::after {
+  opacity: 1;
+}

@@ -1,0 +1,11 @@
+.title{
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--dark-blue-80);
+}
+
+.title:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
