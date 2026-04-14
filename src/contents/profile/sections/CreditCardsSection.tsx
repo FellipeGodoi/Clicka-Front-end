@@ -3,23 +3,17 @@ import ProfileSection from "@/components/profile-sections/ProfileSections"
 import ProfileList from "@/components/profile-sections/ProfileList"
 import EditCreditCardModal from "@/components/modals/profile-modals/EditCreditCardModal"
 import style from "../style.module.css"
+import { CardResponse } from "@/interfaces/request-interfaces/request-user.interface"
 
 type Props = {
-  cards: any[]
-  onSave: (cards: any[]) => void
+  cards: CardResponse[]
+  onReload: () => void
 }
 
-const CreditCardsSection = ({ cards = [], onSave }: Props) => {
-  const [cardModalOpen, setCardModalOpen] = useState(false)
-  const [selectedCard, setSelectedCard] = useState<any>(null)
+const CreditCardsSection = ({ cards = [], onReload }: Props) => {
 
-  const saveCard = (card: any) => {
-    const updated = [
-      ...cards.filter(c => c.id !== card.id),
-      card,
-    ]
-    onSave(updated)
-  }
+  const [cardModalOpen, setCardModalOpen] = useState(false)
+  const [selectedCard, setSelectedCard] = useState<CardResponse | null>(null)
 
   return (
     <>
@@ -40,7 +34,7 @@ const CreditCardsSection = ({ cards = [], onSave }: Props) => {
         <ProfileList
           items={cards.map(card => ({
             id: card.id,
-            label: card.apelido,
+            label: card.nickname,
             onClick: () => {
               setSelectedCard(card)
               setCardModalOpen(true)
@@ -53,7 +47,7 @@ const CreditCardsSection = ({ cards = [], onSave }: Props) => {
         isOpen={cardModalOpen}
         onClose={() => setCardModalOpen(false)}
         card={selectedCard}
-        onSave={saveCard}
+        onSave={onReload}
       />
     </>
   )

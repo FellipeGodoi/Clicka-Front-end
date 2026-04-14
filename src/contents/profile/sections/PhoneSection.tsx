@@ -3,23 +3,18 @@ import ProfileSection from "@/components/profile-sections/ProfileSections"
 import ProfileList from "@/components/profile-sections/ProfileList"
 import EditPhoneModal from "@/components/modals/profile-modals/EditPhoneModal"
 import style from "../style.module.css"
+import { PhoneResponse } from "@/interfaces/request-interfaces/request-user.interface"
 
 type Props = {
-  phones: any[]
-  onSave: (phones: any[]) => void
+  phones: PhoneResponse[]
+  onReload: () => void
+
 }
 
-const PhonesSection = ({ phones = [], onSave }: Props) => {
+const PhonesSection = ({ phones = [], onReload }: Props) => {
   const [phoneModalOpen, setPhoneModalOpen] = useState(false)
   const [selectedPhone, setSelectedPhone] = useState<any>(null)
 
-  const savePhone = (phone: any) => {
-    const updated = [
-      ...phones.filter(p => p.id !== phone.id),
-      phone,
-    ]
-    onSave(updated)
-  }
 
   return (
     <>
@@ -40,7 +35,7 @@ const PhonesSection = ({ phones = [], onSave }: Props) => {
         <ProfileList
           items={phones.map(phone => ({
             id: phone.id,
-            label: phone.apelindo,
+            label: phone.nickname,
             onClick: () => {
               setSelectedPhone(phone)
               setPhoneModalOpen(true)
@@ -53,7 +48,7 @@ const PhonesSection = ({ phones = [], onSave }: Props) => {
         isOpen={phoneModalOpen}
         onClose={() => setPhoneModalOpen(false)}
         phone={selectedPhone}
-        onSave={savePhone}
+        onSave={onReload}
       />
     </>
   )

@@ -13,6 +13,7 @@ export type AddressResponse = {
   city: string
   state: string
   zipCode: string
+  complement: string
 }
 
 export type CardResponse = {
@@ -27,6 +28,7 @@ export type UserMyDataResponse = {
   name?: string
   cpf?: string
   email?: string
+  credit?: number
   isActive?: boolean
   phones?: PhoneResponse[]
   addresses?: AddressResponse[]

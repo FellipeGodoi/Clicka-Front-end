@@ -4,16 +4,26 @@ import { useEffect, useState } from 'react'
 import ModalBody from '../ModalBody'
 import TextInput from '@/components/inputs/text-input/TextInput'
 import Button from '@/components/forms/button/Button'
-import { Address } from '@/interfaces/front-interfaces/User.front.interface'
+import { AddressResponse } from '@/interfaces/request-interfaces/request-user.interface'
+import { api } from '@/api/api'
+import AlertModal from '../alert-modal/AlertModal'
 
 interface EditAddressModalProps {
   isOpen: boolean
   onClose: () => void
-  address?: Address
-  onSave: (address: Address) => void
+  address?: AddressResponse | null
+  onSave: (address: AddressResponse) => void
 }
 
-const EditAddressModal = ({ isOpen, onClose, address, onSave }: EditAddressModalProps) => {
+const EditAddressModal = ({
+  isOpen,
+  onClose,
+  address,
+  onSave,
+}: EditAddressModalProps) => {
+
+  const [loading, setLoading] = useState(false)
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
   const [formData, setFormData] = useState({
     apelido: '',
     cep: '',
@@ -28,14 +38,14 @@ const EditAddressModal = ({ isOpen, onClose, address, onSave }: EditAddressModal
   useEffect(() => {
     if (address) {
       setFormData({
-        apelido: address.apelido,
-        cep: address.cep,
-        logradouro: address.logradouro,
-        numero: address.numero,
-        complemento: address.complemento || '',
-        bairro: address.bairro,
-        cidade: address.cidade,
-        estado: address.estado,
+        apelido: address.nickname,
+        cep: address.zipCode,
+        logradouro: address.street,
+        numero: address.number,
+        complemento: '',
+        bairro: address.neighborhood,
+        cidade: address.city,
+        estado: address.state,
       })
     } else {
       setFormData({
@@ -51,18 +61,122 @@ const EditAddressModal = ({ isOpen, onClose, address, onSave }: EditAddressModal
     }
   }, [address, isOpen])
 
-  function handleSubmit() {
-    onSave({
-      id: address?.id ?? crypto.randomUUID(),
-      ...formData,
-    })
-    onClose()
+  async function handleSubmit() {
+    try {
+      setLoading(true)
+
+      const payload = {
+        nickname: formData.apelido,
+        zipCode: formData.cep,
+        street: formData.logradouro,
+        number: formData.numero,
+        neighborhood: formData.bairro,
+        city: formData.cidade,
+        state: formData.estado,
+      }
+
+      let response
+
+      const token = localStorage.getItem("token")
+
+      if (address?.id) {
+        response = await api.put(
+          `/my-data/addresses/${address.id}`,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+      } else {
+        response = await api.post(
+          `/my-data/addresses`,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+      }
+
+      onSave(response.data)
+      onClose()
+
+    } catch (error) {
+      console.error("Erro ao salvar endereço", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleDelete() {
+    if (!address?.id) return
+
+    try {
+      setLoading(true)
+
+      const token = localStorage.getItem("token")
+
+      await api.delete(
+        `/my-data/addresses/${address.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      onSave({} as AddressResponse)
+      onClose()
+
+    } catch (error) {
+      console.error("Erro ao excluir endereço", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function fetchCep(cep: string) {
+    const cleanCep = cep.replace(/\D/g, "")
+
+    if (cleanCep.length !== 8) return
+
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`)
+      const data = await response.json()
+
+      if (data.erro) return
+
+      setFormData(prev => ({
+        ...prev,
+        logradouro: data.logradouro || '',
+        bairro: data.bairro || '',
+        cidade: data.localidade || '',
+        estado: data.uf || '',
+      }))
+
+    } catch (error) {
+      console.error("Erro ao buscar CEP", error)
+    }
   }
 
   return (
     <ModalBody isOpen={isOpen} onClose={onClose} maxWidth="800px">
       <div style={{ padding: 24 }}>
-        <h2 style={{ marginBottom: 24 }}>Endereço</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <h2 style={{ marginBottom: 24, fontSize: 22, fontWeight: 600 }}>Endereço</h2>
+
+          <div>
+            {address?.id && (
+              <Button onClick={() => setConfirmDeleteOpen(true)} style={{ width: 120, color: "var(--error-1)" }}>
+                {loading ? "Excluindo..." : "Excluir"}
+              </Button>
+            )}
+          </div>
+
+        </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
           <TextInput
@@ -75,7 +189,11 @@ const EditAddressModal = ({ isOpen, onClose, address, onSave }: EditAddressModal
             label="CEP"
             mask="zipcode"
             value={formData.cep}
-            onChange={e => setFormData({ ...formData, cep: e.target.value })}
+            onChange={e => {
+              const value = e.target.value
+              setFormData({ ...formData, cep: value })
+              fetchCep(value)
+            }}
           />
 
           <TextInput
@@ -91,11 +209,11 @@ const EditAddressModal = ({ isOpen, onClose, address, onSave }: EditAddressModal
             onChange={e => setFormData({ ...formData, numero: e.target.value })}
           />
 
-          <TextInput
+          {/* <TextInput
             label="Complemento"
             value={formData.complemento}
             onChange={e => setFormData({ ...formData, complemento: e.target.value })}
-          />
+          /> */}
 
           <TextInput
             label="Bairro"
@@ -117,10 +235,26 @@ const EditAddressModal = ({ isOpen, onClose, address, onSave }: EditAddressModal
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 24 }}>
-          <Button onClick={onClose} color="--gray-60">Cancelar</Button>
-          <Button onClick={handleSubmit} color="--dark-blue-80">Salvar</Button>
+          <Button onClick={onClose} color="--gray-60">
+            Cancelar
+          </Button>
+
+          <Button onClick={handleSubmit} color="--dark-blue-80">
+            {loading ? "Salvando..." : "Salvar"}
+          </Button>
         </div>
       </div>
+
+      <AlertModal
+        isOpen={confirmDeleteOpen}
+        title="Excluir endereço"
+        message="Tem certeza que deseja excluir este endereço?"
+        onCancel={() => setConfirmDeleteOpen(false)}
+        onConfirm={() => {
+          handleDelete()
+          setConfirmDeleteOpen(false)
+        }}
+      />
     </ModalBody>
   )
 }

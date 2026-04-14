@@ -7,6 +7,9 @@ import PersonalDataSection from './sections/PersonalDataSection'
 import { LoadingOverlay } from '@/components/loading/LoadingOverlay'
 import { getMyData } from '@/service/user/getUser'
 import { UserMyDataResponse } from '@/interfaces/request-interfaces/request-user.interface'
+import PhonesSection from './sections/PhoneSection'
+import AddressesSection from './sections/AddressSection'
+import CreditCardsSection from './sections/CreditCardsSection'
 
 
 const ProfileContent = () => {
@@ -46,6 +49,18 @@ useEffect(() => {
   init()
 }, [router])
 
+const reloadProfile = async () => {
+  try {
+    setLoading(true)
+    const data = await getMyData()
+    setUser(data)
+  } catch (error) {
+    console.error("Erro ao recarregar perfil", error)
+  } finally {
+    setLoading(false)
+  }
+}
+
   if (loading || !user) {
     return (
       <PageContainer gap={16}>
@@ -63,28 +78,22 @@ useEffect(() => {
         onSave={setUser}
       />
 
-      {/*
       <PhonesSection
-        phones={user.phones}
-        onSave={(phones) =>
-          setUser(prev => prev && ({ ...prev, phones }))
-        }
-      />
+        phones={user?.phones || []}
+        onReload={reloadProfile}
 
+      />
+ 
       <AddressesSection
-        addresses={user.addresses}
-        onSave={(addresses) =>
-          setUser(prev => prev && ({ ...prev, addresses }))
-        }
+        addresses={user?.addresses || []}
+        onReload={reloadProfile}
       />
-
+     
       <CreditCardsSection
-        cards={user.cards}
-        onSave={(cards) =>
-          setUser(prev => prev && ({ ...prev, cards }))
-        }
+        cards={user?.cards || []}
+        onReload={reloadProfile}
       />
-      */}
+     
     </PageContainer>
   )
 }
