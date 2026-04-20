@@ -10,6 +10,7 @@ import { UserMyDataResponse } from '@/interfaces/request-interfaces/request-user
 import PhonesSection from './sections/PhoneSection'
 import AddressesSection from './sections/AddressSection'
 import CreditCardsSection from './sections/CreditCardsSection'
+import OrdersSection from './sections/OrdersSection'
 
 
 const ProfileContent = () => {
@@ -93,6 +94,8 @@ const reloadProfile = async () => {
         cards={user?.cards || []}
         onReload={reloadProfile}
       />
+
+      <OrdersSection />
      
     </PageContainer>
   )

@@ -10,11 +10,12 @@ interface ProfileListItem {
 
 interface ProfileListProps {
   items?: ProfileListItem[]
+  isEmptyMessage?: string
 }
 
-const ProfileList = ({ items }: ProfileListProps) => {
+const ProfileList = ({ items, isEmptyMessage = "Nenhum item encontrado" }: ProfileListProps) => {
   if (!items || items.length === 0) {
-    return <span className={style.label}>Nenhum item cadastrado</span>
+    return <span className={style.label}>{isEmptyMessage}</span>
   }
 
   return (
