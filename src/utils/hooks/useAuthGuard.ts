@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getUserById } from "@/service/user/getUser";
+import { getMyData } from "@/service/user/getUser";
 
 export function useAuthGuard() {
   const router = useRouter();
@@ -10,17 +10,17 @@ export function useAuthGuard() {
 
   useEffect(() => {
     async function validate() {
-      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token");
 
-      if (!userId) {
+      if (!token) {
         router.push("/auth");
         return;
       }
 
       try {
-        await getUserById(userId);
+        await getMyData();
       } catch (error) {
-        localStorage.removeItem("userId");
+        localStorage.removeItem("token");
         router.push("/auth");
         return;
       } finally {

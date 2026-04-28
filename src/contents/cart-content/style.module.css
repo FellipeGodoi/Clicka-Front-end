@@ -322,6 +322,12 @@
   margin-top: 8px;
 }
 
+.errorText {
+  color: #640d0d;
+  margin-top: 8px;
+}
+
+
 .summaryBox {
   background: #fafafa;
   padding: 20px;
@@ -427,4 +433,39 @@
 
 .finishButton:hover {
   background: #0a5237;
+}
+
+.sectionHeader{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.addButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  background: none;
+  border: 1px dashed var(--neutral-40);
+  border-radius: 8px;
+  padding: 6px 12px;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--neutral-80);
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.addButton span {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.addButton:hover {
+  background: var(--neutral-10);
+  border-color: var(--neutral-60);
 }

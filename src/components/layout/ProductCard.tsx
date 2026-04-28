@@ -2,24 +2,29 @@
 
 import Image, { StaticImageData } from 'next/image'
 import styles from './product-card.module.css'
+import { useNavigate } from '@/utils/hooks/UseNavigate'
 
 interface ProductCardProps {
   image: StaticImageData
   name: string
   originalPrice: number
-  promotionalPrice: number
+  promotionalPrice?: number
+  id: string
 }
 
 const ProductCard = ({
   image,
   name,
   originalPrice,
-  promotionalPrice
+  promotionalPrice,
+  id,
 }: ProductCardProps) => {
+  const hasPromotion = promotionalPrice !== undefined && promotionalPrice !== null
+  const { navigateTo } = useNavigate()
+
   return (
-    <div className={styles.card}>
-      
-      {/* Imagem */}
+    <div className={styles.card} onClick={() => navigateTo('/product/' + id)}>
+
       <div className={styles.imageWrapper}>
         <Image
           src={image}
@@ -29,20 +34,26 @@ const ProductCard = ({
         />
       </div>
 
-      {/* Nome */}
       <h3 className={styles.name}>
         {name}
       </h3>
 
-      {/* Preços */}
       <div className={styles.prices}>
-        <span className={styles.originalPrice}>
-          R$ {originalPrice.toFixed(2)}
-        </span>
+        {hasPromotion ? (
+          <>
+            <span className={styles.originalPrice}>
+              R$ {originalPrice.toFixed(2)}
+            </span>
 
-        <span className={styles.promotionalPrice}>
-          R$ {promotionalPrice.toFixed(2)}
-        </span>
+            <span className={styles.promotionalPrice}>
+              R$ {promotionalPrice.toFixed(2)}
+            </span>
+          </>
+        ) : (
+          <span className={styles.promotionalPrice}>
+            R$ {originalPrice.toFixed(2)}
+          </span>
+        )}
       </div>
     </div>
   )

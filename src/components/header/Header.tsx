@@ -37,7 +37,7 @@ const Header = () => {
       <div className={styles.inner}>
 
         {/* Logo */}
-        <div className={styles.logo}>
+        <div className={styles.logo} style={{ cursor:"pointer"}} onClick={()=> navigateTo('/')}>
           <IconComponent
             Icon={logo}
             width={100}
