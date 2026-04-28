@@ -9,6 +9,11 @@ export interface OrderResponse {
   creditUsed: number
   couponCode: string | null
 
+  createdAt: string | null
+  updatedAt: string | null
+  estimatedDeliveryDate: string | null
+  deliveredAt: string | null
+
   address: {
     city: string
     neighborhood: string

@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 
 interface PageContainerProps {
   children: ReactNode
+  minHeight?: string | number
   maxWidth?: number
   margin?: string
   gap?:number
@@ -12,6 +13,7 @@ interface PageContainerProps {
 const PageContainer = ({
   children,
   maxWidth = 1200,
+  minHeight = "70vh",
   margin = '24px',
   gap=60
 }: PageContainerProps) => {
@@ -20,6 +22,7 @@ const PageContainer = ({
       style={{
         width: '100%',
         maxWidth,
+        minHeight,
         margin,
         display:'flex',
         flexDirection:'column',

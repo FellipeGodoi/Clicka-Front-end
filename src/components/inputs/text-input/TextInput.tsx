@@ -11,6 +11,7 @@ type MaskType =
   | 'phone'
   | 'zipcode'
   | 'number'
+  | 'currency'
   | 'sus'
   | 'no-space'
   | 'only-letters'

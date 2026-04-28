@@ -10,26 +10,43 @@ type ButtonProps = {
     height?: string
     status?: boolean,
     bgColor?: string,
-    ftColor?:string,
-    borderColor?:string
+    ftColor?: string,
+    borderColor?: string
 };
 
 export const Button: React.FC<ButtonProps> = ({
     id,
     children,
     onClick,
-    maxWidth ,
+    maxWidth,
     fontSize,
     fontWeight,
     height,
     status = false,
     bgColor,
     ftColor,
-    borderColor
+    borderColor,
 }) => {
     return (
-        <button className={`${styles.base}`} id={id} disabled={status} style={{ height: height, maxWidth: maxWidth, fontSize: fontSize, fontWeight: fontWeight, color:ftColor, background: bgColor, border:borderColor   }} onClick={onClick}>
-            {children}
+        <button
+            className={styles.base}
+            id={id}
+            disabled={status}
+            onClick={onClick}
+            style={{
+                height,
+                maxWidth,
+                fontSize,
+                fontWeight,
+                color: ftColor,
+                background: bgColor,
+                border: borderColor,
+                opacity: status ? 0.5 : 1,
+                cursor: status ? "not-allowed" : "pointer",
+                pointerEvents: status ? "none" : "auto",
+                transition: "0.2s ease"
+            }}
+        >            {children}
         </button>
     );
 };
