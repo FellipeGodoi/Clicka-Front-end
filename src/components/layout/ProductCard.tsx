@@ -23,7 +23,7 @@ const ProductCard = ({
   const { navigateTo } = useNavigate()
 
   return (
-    <div className={styles.card} onClick={() => navigateTo('/product/' + id)}>
+    <div  id={`prod-card-${id}`} className={styles.card} onClick={() => navigateTo('/product/' + id)}>
 
       <div className={styles.imageWrapper}>
         <Image

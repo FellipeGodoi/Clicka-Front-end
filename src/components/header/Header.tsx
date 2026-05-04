@@ -59,14 +59,14 @@ const Header = () => {
         <div className={styles.actions}>
 
           {/* Carrinho */}
-          <button className={styles.iconButton} onClick={() => navigateTo('/cart')}>
+          <button id='cart-button' className={styles.iconButton} onClick={() => navigateTo('/cart')}>
             <ShoppingCartIcon width={24} height={24} />
 
             {hasCartItems && <span className={styles.cartBadge} />}
           </button>
 
           {/* Perfil */}
-          <button className={styles.iconButton}>
+          <button id='profile-button' className={styles.iconButton}>
             <UserIcon width={24} height={24} onClick={() => navigateTo('/profile')}/>
           </button>
 

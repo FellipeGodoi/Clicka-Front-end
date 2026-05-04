@@ -39,6 +39,7 @@ export function OrderPaySection({
         <>
             <div>
                 <Button
+                    id='add-payment'
                     maxWidth="300px"
                     height="40px"
                     bgColor="var(--light-blue-100)"
@@ -85,7 +86,7 @@ export function OrderPaySection({
                     </h3>
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                        {selectedCards.map(card => (
+                        {selectedCards.map((card,index) => (
                             <div
                                 key={card.id}
                                 style={{
@@ -100,7 +101,7 @@ export function OrderPaySection({
                                 </span>
 
                                 <TextInput
-                                    id={`value-${card.id}`}
+                                    id={`value-${index}`}
                                     value={
                                         cardValues[card.id]
                                             ? cardValues[card.id].toLocaleString("pt-BR", {
@@ -146,6 +147,7 @@ export function OrderPaySection({
             {/* Botão */}
             <div style={{ marginTop: "16px" }}>
                 <Button
+                    id='finish-payment'
                     maxWidth="300px"
                     height="40px"
                     bgColor="var(--success-1)"

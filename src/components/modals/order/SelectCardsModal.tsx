@@ -58,11 +58,12 @@ export default function SelectCardsModal({
           maxHeight: "300px",
           overflowY: "auto"
         }}>
-          {cards.map(card => {
+          {cards.map((card,index)=> {
             const isSelected = selectedCards.some(c => c.id === card.id)
 
             return (
               <label
+                id={'select-card-' + index}
                 key={card.id}
                 style={{
                   display: "flex",
@@ -99,6 +100,7 @@ export default function SelectCardsModal({
           paddingTop: "8px"
         }}>
           <Button
+            id="cancel-card-button"
             height="36px"
             onClick={onClose}
           >
@@ -106,6 +108,7 @@ export default function SelectCardsModal({
           </Button>
 
           <Button
+            id = 'confirm-card-button'
             height="36px"
             onClick={handleConfirm}
           >

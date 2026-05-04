@@ -274,12 +274,13 @@ const InformationStep = ({
 
                 <div className={styles.couponArea}>
                     <input
+                        id='coupon-field'
                         type="text"
                         placeholder="Digite seu cupom"
                         value={coupon}
                         onChange={(e) => setCoupon(e.target.value)}
                     />
-                    <button onClick={handleApplyCoupon}>
+                    <button id="apply-coupon" onClick={handleApplyCoupon}>
                         Aplicar
                     </button>
                 </div>
@@ -351,6 +352,7 @@ const InformationStep = ({
                 </button>
 
                 <button
+                    id='go-to-payment'
                     className={styles.continueButton}
                     onClick={handleCreateOrder}
                 >

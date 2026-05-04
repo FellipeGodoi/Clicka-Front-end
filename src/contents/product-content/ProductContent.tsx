@@ -117,6 +117,7 @@ const ProductContent = () => {
                         </span>
 
                         <button
+                            id="add-to-cart"
                             className={styles.button}
                             onClick={handleAddToCart}
                             disabled={added}

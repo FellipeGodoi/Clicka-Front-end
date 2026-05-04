@@ -44,6 +44,7 @@ const OrderTable = ({
           {items.map((item) => (
             <tr
               key={item.id}
+              id = {'order-button-' + item.id}
               className={style.row}
               onClick={() => router.push(`/profile/order/${item.id}`)}
             >
