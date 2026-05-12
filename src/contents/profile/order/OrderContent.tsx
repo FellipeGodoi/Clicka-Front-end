@@ -21,6 +21,7 @@ import { cancelMyOrder } from "@/service/user/cancelOrder"
 import Toast from "@/components/modals/toast/Toast"
 import ReturnOrderModal from "@/components/modals/return-order-modal/ReturnOrderModal"
 import { createReturning } from "@/service/user/createReturning"
+import EditCreditCardModal from "@/components/modals/profile-modals/EditCreditCardModal"
 
 const statusMap: Record<string, string> = {
     CREATED: "Criado",
@@ -50,8 +51,8 @@ export function OrderContent() {
     const [cardModalOpen, setCardModalOpen] = useState(false)
     const [selectedCards, setSelectedCards] = useState<CardResponse[]>([])
     const [cardValues, setCardValues] = useState<Record<string, number>>({})
-    const [returnModalOpen, setReturnModalOpen] =
-        useState(false)
+    const [createCardModalOpen, setCreateCardModalOpen] = useState(false)
+    const [returnModalOpen, setReturnModalOpen] = useState(false)
 
 
     useEffect(() => {
@@ -199,6 +200,7 @@ export function OrderContent() {
                     handleChangeCardValue={handleChangeCardValue}
                     handleRemoveCard={handleRemoveCard}
                     isValidPayment={isValidPayment}
+                    openCreateCardModal={() => setCreateCardModalOpen(true)}
                 />
             )}
 
@@ -241,6 +243,30 @@ export function OrderContent() {
                 type={toastData.type}
                 onClose={() => setToastOpen(false)}
             />
+
+            <EditCreditCardModal
+    isOpen={createCardModalOpen}
+    onClose={() => setCreateCardModalOpen(false)}
+    card={null}
+    onSave={(newCard) => {
+
+        setUser(prev => {
+            if (!prev) return prev
+
+            return {
+                ...prev,
+                cards: [...(prev.cards || []), newCard]
+            }
+        })
+
+        setSelectedCards(prev => [...prev, newCard])
+
+        setCardValues(prev => ({
+            ...prev,
+            [newCard.id]: 0
+        }))
+    }}
+/>
 
             <SelectCardsModal
                 isOpen={cardModalOpen}

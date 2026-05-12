@@ -21,6 +21,7 @@ export type CardResponse = {
   cardNumber: string
   nickname: string
   expirationDate: string
+  cvv:string
 }
 
 export type UserMyDataResponse = {

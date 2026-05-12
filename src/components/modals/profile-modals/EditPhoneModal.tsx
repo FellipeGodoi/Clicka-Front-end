@@ -138,6 +138,7 @@ const EditPhoneModal = ({ isOpen, onClose, phone, onSave }: EditPhoneModalProps)
           }}
         >
           <TextInput
+            id='nickname'
             label="Apelido"
             value={formData.apelindo}
             onChange={e =>
@@ -146,6 +147,7 @@ const EditPhoneModal = ({ isOpen, onClose, phone, onSave }: EditPhoneModalProps)
           />
 
           <TextInput
+            id='number'
             label="Número"
             mask="phone"
             value={formData.numero}
@@ -167,7 +169,7 @@ const EditPhoneModal = ({ isOpen, onClose, phone, onSave }: EditPhoneModalProps)
             Cancelar
           </Button>
 
-          <Button onClick={handleSubmit} color="--dark-blue-80">
+          <Button id='submit' onClick={handleSubmit} color="--dark-blue-80">
             {loading ? "Salvando..." : "Salvar"}
           </Button>
         </div>

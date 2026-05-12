@@ -25,10 +25,13 @@ const EditCreditCardModal = ({
   const [loading, setLoading] = useState(false)
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
 
+
+
   const [formData, setFormData] = useState({
     apelido: '',
     number: '',
     validate: '',
+    cvv: '',
   })
 
   useEffect(() => {
@@ -37,29 +40,38 @@ const EditCreditCardModal = ({
         apelido: card.nickname,
         number: card.cardNumber,
         validate: card.expirationDate,
+        cvv: card.cvv,
+
       })
     } else {
       setFormData({
         apelido: '',
         number: '',
         validate: '',
+        cvv: '',
+
       })
     }
   }, [card, isOpen])
 
   async function handleSubmit() {
+    const [month, year] = formData.validate.split('/')
+
+const formattedExpirationDate =
+  `20${year}-${month.padStart(2, '0')}-01`
     try {
       setLoading(true)
-
       const payload = {
         nickname: formData.apelido,
         cardNumber: formData.number,
-        expirationDate: formData.validate,
+        expirationDate: formattedExpirationDate,
+        cvv: formData.cvv
       }
 
       let response
 
       const token = localStorage.getItem("token")
+
 
       if (card?.id) {
         response = await api.put(
@@ -141,6 +153,7 @@ const EditCreditCardModal = ({
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
           <TextInput
+            id='nickname'
             label="Apelido"
             value={formData.apelido}
             onChange={e => setFormData({ ...formData, apelido: e.target.value })}
@@ -148,6 +161,7 @@ const EditCreditCardModal = ({
           />
 
           <TextInput
+            id='number'
             label="Número do cartão"
             value={formData.number}
             onChange={e => setFormData({ ...formData, number: e.target.value })}
@@ -155,10 +169,23 @@ const EditCreditCardModal = ({
           />
 
           <TextInput
+            id='validate'
             label="Validade"
             placeholder="MM/AA"
             value={formData.validate}
             onChange={e => setFormData({ ...formData, validate: e.target.value })}
+          />
+          <TextInput
+            id='cvv'
+            label="CVV"
+            placeholder="123"
+            value={formData.cvv}
+            onChange={e =>
+              setFormData({
+                ...formData,
+                cvv: e.target.value
+              })
+            }
           />
         </div>
 
@@ -167,7 +194,7 @@ const EditCreditCardModal = ({
             Cancelar
           </Button>
 
-          <Button onClick={handleSubmit} color="--dark-blue-80">
+          <Button id='submit' onClick={handleSubmit} color="--dark-blue-80">
             {loading ? "Salvando..." : "Salvar"}
           </Button>
         </div>

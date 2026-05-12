@@ -14,6 +14,7 @@ type Props = {
     setCardModalOpen: (value: boolean) => void
     handleChangeCardValue: (cardId: string, value: string) => void
     handleRemoveCard: (cardId: string) => void
+    openCreateCardModal: () => void
 
     isValidPayment: boolean
 }
@@ -25,7 +26,8 @@ export function OrderPaySection({
     setCardModalOpen,
     handleChangeCardValue,
     handleRemoveCard,
-    isValidPayment
+    isValidPayment,
+    openCreateCardModal
 }: Props) {
 
     const totalCardsValue = Object.values(cardValues).reduce(
@@ -37,7 +39,7 @@ export function OrderPaySection({
 
     return (
         <>
-            <div>
+            <div style={{display:"flex", gap:12, flexWrap: "wrap" }}>
                 <Button
                     id='add-payment'
                     maxWidth="300px"
@@ -48,6 +50,18 @@ export function OrderPaySection({
                 >
                     Adicionar metodo de pagamento
                 </Button>
+
+                <Button
+                    id='add-card'
+                    maxWidth="300px"
+                    height="40px"
+                    borderColor="1px solid var(--dark-blue-80)"
+                    ftColor="var(--dark-blue-80)"
+                    onClick={openCreateCardModal}
+                >
+                    Cadastrar novo cartão
+                </Button>
+
             </div>
 
             {/* 1 cartão */}

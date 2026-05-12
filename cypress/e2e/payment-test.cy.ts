@@ -1,15 +1,11 @@
+import { login } from "../support/commands"
+
 const valueCard1 = ' 774.70'
 const valueCard2 = '10.00'
 
 const id = 'a0c92d17-9b76-4750-9c44-d53e1dd764eb'
 
 const url = '/profile/order/'
-
-  function login() {
-    cy.get('[name="email"]').type('user@clicka.com')
-    cy.get('[name="password"]').type('123456')
-    cy.get('button[type="submit"]').click()
-  }
 
 it('Deve realizar o pagamento', () => {
     //home

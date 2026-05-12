@@ -36,3 +36,14 @@
 //   }
 // }
 
+ export function login() {
+    cy.get('[name="email"]').type('user@clicka.com')
+    cy.get('[name="password"]').type('123456')
+    cy.get('button[type="submit"]').click()
+  }
+
+   export function admLogin() {
+    cy.get('[name="email"]').type('admin@clicka.com')
+    cy.get('[name="password"]').type('123456')
+    cy.get('button[type="submit"]').click()
+  }

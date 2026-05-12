@@ -155,9 +155,10 @@ export default function AdminReturnDetailsModal({
 >
 
     {/* BOTÃO DE RECUSA SEMPRE VISÍVEL */}
-    {
+    {returnData.status === "REQUESTED" &&
         !["APPROVED", "REJECTED"].includes(returnData.status) && (
             <Button
+                id="btn-refuse"
                 bgColor="var(--yellow-100)"
                 ftColor="white"
                 maxWidth="170px"
@@ -202,14 +203,14 @@ export default function AdminReturnDetailsModal({
 
     {/* REQUESTED -> APROVAR SOLICITAÇÃO */}
     {
-        returnData.status === "REQUESTED" && (
+        returnData.status === "RECEIVED" && (
             <Button
+                id="btn-approve"
                 bgColor="var(--dark-blue-80)"
                 ftColor="white"
                 maxWidth="170px"
                 fontSize="14px"
                 height="32px"
-
                 onClick={() => {
 
                     setConfirmTitle(
@@ -244,6 +245,7 @@ export default function AdminReturnDetailsModal({
     {
         returnData.status === "SENT" && (
             <Button
+                id="btn-sent"
                 bgColor="var(--dark-blue-80)"
                 ftColor="white"
                 maxWidth="170px"
@@ -284,6 +286,7 @@ export default function AdminReturnDetailsModal({
     {
         returnData.status === "RECEIVED" && (
             <Button
+                id="btn-approve"
                 bgColor="var(--dark-blue-80)"
                 ftColor="white"
                 maxWidth="170px"

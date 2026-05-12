@@ -180,12 +180,14 @@ const EditAddressModal = ({
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
           <TextInput
+            id='nickname'
             label="Apelido"
             value={formData.apelido}
             onChange={e => setFormData({ ...formData, apelido: e.target.value })}
           />
 
           <TextInput
+            id='zipcode'
             label="CEP"
             mask="zipcode"
             value={formData.cep}
@@ -197,6 +199,7 @@ const EditAddressModal = ({
           />
 
           <TextInput
+            id='street'
             label="Logradouro"
             value={formData.logradouro}
             onChange={e => setFormData({ ...formData, logradouro: e.target.value })}
@@ -204,6 +207,7 @@ const EditAddressModal = ({
           />
 
           <TextInput
+            id='number'
             label="Número"
             value={formData.numero}
             onChange={e => setFormData({ ...formData, numero: e.target.value })}
@@ -216,18 +220,21 @@ const EditAddressModal = ({
           /> */}
 
           <TextInput
+          id='neighborhood'
             label="Bairro"
             value={formData.bairro}
             onChange={e => setFormData({ ...formData, bairro: e.target.value })}
           />
 
           <TextInput
+            id='city'
             label="Cidade"
             value={formData.cidade}
             onChange={e => setFormData({ ...formData, cidade: e.target.value })}
           />
 
           <TextInput
+            id='state'
             label="Estado"
             value={formData.estado}
             onChange={e => setFormData({ ...formData, estado: e.target.value })}
@@ -235,11 +242,11 @@ const EditAddressModal = ({
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 24 }}>
-          <Button onClick={onClose} color="--gray-60">
+          <Button id='cancel' onClick={onClose} color="--gray-60">
             Cancelar
           </Button>
 
-          <Button onClick={handleSubmit} color="--dark-blue-80">
+          <Button id='submit' onClick={handleSubmit} color="--dark-blue-80">
             {loading ? "Salvando..." : "Salvar"}
           </Button>
         </div>

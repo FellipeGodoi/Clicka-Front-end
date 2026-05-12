@@ -213,6 +213,7 @@ const InformationStep = ({
                     <h2>Endereço de entrega</h2>
 
                     <button
+                        id='add-address'
                         className={styles.addButton}
                         onClick={() => setAddressModalOpen(true)}
                     >
@@ -245,6 +246,7 @@ const InformationStep = ({
                     <h2>Telefone para contato</h2>
 
                     <button
+                        id='add-phone'
                         className={styles.addButton}
                         onClick={() => setPhoneModalOpen(true)}
                     >
