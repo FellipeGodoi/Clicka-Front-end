@@ -203,7 +203,7 @@ export default function AdminReturnDetailsModal({
 
     {/* REQUESTED -> APROVAR SOLICITAÇÃO */}
     {
-        returnData.status === "RECEIVED" && (
+        returnData.status === "REQUESTED" && (
             <Button
                 id="btn-approve"
                 bgColor="var(--dark-blue-80)"
