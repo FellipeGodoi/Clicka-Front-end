@@ -53,19 +53,23 @@ const ShopContent = () => {
             {/* TECLADOS */}
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 <span className={style.title}>Teclados</span>
+                {
+                    keyboards.length > 0 && (
+                        <HorizontalScroller>
+                            {keyboards.map((product) => (
+                                <ProductCard
+                                    key={product.id}
+                                    id={product.id}
+                                    image={teclado}
+                                    name={product.name}
+                                    originalPrice={product.defaultPrice}
+                                    promotionalPrice={product.promotionalPrice}
+                                />
+                            ))}
+                        </HorizontalScroller>
+                    )
+                }
 
-                <HorizontalScroller>
-                    {keyboards.map((product) => (
-                        <ProductCard
-                            key={product.id}
-                            id={product.id}
-                            image={teclado}
-                            name={product.name}
-                            originalPrice={product.defaultPrice}
-                            promotionalPrice={product.promotionalPrice}
-                        />
-                    ))}
-                </HorizontalScroller>
             </div>
 
             {/* MOUSES */}

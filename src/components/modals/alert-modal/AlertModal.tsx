@@ -1,5 +1,6 @@
 'use client'
 
+import { ReactNode } from 'react'
 import ModalBody from '../ModalBody'
 import Button from '@/components/forms/button/Button'
 
@@ -9,6 +10,7 @@ interface AlertModalProps {
     message: string
     confirmText?: string
     cancelText?: string
+    form?: ReactNode | undefined
     onConfirm: () => void
     onCancel: () => void
 }
@@ -21,6 +23,7 @@ const AlertModal = ({
     cancelText = "Cancelar",
     onConfirm,
     onCancel,
+    form
 }: AlertModalProps) => {
 
     return (

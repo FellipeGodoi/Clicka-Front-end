@@ -35,7 +35,7 @@ export const Button: React.FC<ButtonProps> = ({
             onClick={onClick}
             style={{
                 height,
-                maxWidth,
+                width : maxWidth,
                 fontSize,
                 fontWeight,
                 color: ftColor,

@@ -13,6 +13,14 @@ import { CardResponse, UserMyDataResponse } from "@/interfaces/request-interface
 import { getMyData } from "@/service/user/getUser"
 import SelectCardsModal from "@/components/modals/order/SelectCardsModal"
 import { OrderPaySection } from "./OrderPaySection"
+import AlertModal from "@/components/modals/alert-modal/AlertModal"
+import { OrderItemsSection } from "./OrderItemSection"
+import { OrderSummarySection } from "./OrderSumarySection"
+import { OrderHeader } from "./OrderHeader"
+import { cancelMyOrder } from "@/service/user/cancelOrder"
+import Toast from "@/components/modals/toast/Toast"
+import ReturnOrderModal from "@/components/modals/return-order-modal/ReturnOrderModal"
+import { createReturning } from "@/service/user/createReturning"
 
 const statusMap: Record<string, string> = {
     CREATED: "Criado",
@@ -28,7 +36,13 @@ export function OrderContent() {
     const { id } = useParams()
     const router = useRouter()
 
+    const [alertModal, setAlertModal] = useState<boolean>(false)
+    const [toastOpen, setToastOpen] = useState(false)
 
+    const [toastData, setToastData] = useState({
+        message: "",
+        type: "success" as "success" | "error"
+    })
     const [loading, setLoading] = useState(true)
     const [order, setOrder] = useState<OrderResponse | null>(null)
     const [user, setUser] = useState<UserMyDataResponse | null>(null)
@@ -36,6 +50,8 @@ export function OrderContent() {
     const [cardModalOpen, setCardModalOpen] = useState(false)
     const [selectedCards, setSelectedCards] = useState<CardResponse[]>([])
     const [cardValues, setCardValues] = useState<Record<string, number>>({})
+    const [returnModalOpen, setReturnModalOpen] =
+        useState(false)
 
 
     useEffect(() => {
@@ -77,7 +93,8 @@ export function OrderContent() {
 
     const canShowButton = isStatusAllowed(order.status, [
         "CREATED",
-        "AWAITING_PAYMENT"
+        "AWAITING_PAYMENT",
+        "AWAITING_APPROVAL"
     ])
 
     function handleChangeCardValue(cardId: string, value: string) {
@@ -134,107 +151,46 @@ export function OrderContent() {
         })
     }
 
+    async function handleCancelOrder() {
+        if (order !== null) {
+            try {
+                await cancelMyOrder(order.id)
+
+                window.location.reload()
+
+            } catch (error) {
+                console.error(error)
+
+                setToastData({
+                    message: "Opps, algo deu errado ao cancelar o pedido.",
+                    type: "error"
+                })
+
+                setToastOpen(true)
+            }
+
+        }
+    }
+
     return (
         <PageContainer gap={24}>
-            <ProfileSection
-                title=""
-            >
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px", alignItems: "center" }}>
-                    <h1 className="text-xl font-semibold">
-                        Pedido: {order.id}
-                    </h1>
+            <ProfileSection title="">
+                <OrderHeader
+                    orderId={order.id}
+                    canShowButton={canShowButton}
+                    cancelOrder={() => setAlertModal(true)}
+                />
 
-                    {
-                        canShowButton &&
-                        <Button
-                            maxWidth="200px"
-                            height="38px"
-                            ftColor="var(--error-1)"
-                            borderColor="var(--error-1) dashed"
-                        >
-                            Cancelar pedido
-                        </Button>
-                    }
-                </div>
             </ProfileSection>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <p style={{ width: "25%" }}>
-                        <span className="font-medium">Status:</span>{" "}
-                        {statusMap[order.status] || order.status}
-                    </p>
-
-                    <p style={{ width: "25%" }}>
-                        <span className="font-medium">Total produtos:</span>{" "}
-                        R$ {Number(order.totalAmount).toFixed(2)}
-                    </p>
-
-                    <p style={{ width: "25%" }}>
-                        <span className="font-medium">Desconto:</span>{" "}
-                        R$ {Number(order.discountAmount).toFixed(2)}
-                    </p>
-                </div>
-
-
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <p style={{ width: "25%" }}>
-                        <span className="font-medium">Crédito usado:</span>{" "}
-                        R$ {Number(order.creditUsed).toFixed(2)}
-                    </p>
-
-                    <p style={{ width: "25%" }}>
-                        <span className="font-medium">Total final:</span>{" "}
-                        <span className="font-bold">
-                            R$ {Number(order.finalAmount).toFixed(2)}
-                        </span>
-                    </p>
-
-
-                    <p style={{ width: "25%" }}>
-                        {order.couponCode && (<>
-                            <span className="font-medium">Cupom:</span>{" "}
-                            {order.couponCode}
-                        </>
-                        )}
-                    </p>
-
-                </div>
-
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    {order.createdAt && (
-                        <p style={{ width: "25%" }}>
-                            <span className="font-medium">Criação do pedido:</span>{" "}
-                            {formatDate(order.createdAt)}
-                        </p>
-                    )}
-                    {order.updatedAt && (
-                        <p style={{ width: "25%" }}>
-                            <span className="font-medium">Pedido atualizado em:</span>{" "}
-                            {formatDate(order.updatedAt)}
-                        </p>
-                    )}
-                    {order.estimatedDeliveryDate && (
-                        <p style={{ width: "25%" }}>
-                            <span className="font-medium">Prazo para entrega:</span>{" "}
-                            {formatDate(order.estimatedDeliveryDate)}
-                        </p>
-                    )}
-                    {order.deliveredAt && (
-                        <p style={{ width: "25%" }}>
-                            <span className="font-medium">Criação do pedido:</span>{" "}
-                            {formatDate(order.deliveredAt)}
-                        </p>
-                    )}
-                </div>
-
-
-            </div>
+            <OrderSummarySection
+                order={order}
+                statusMap={statusMap}
+            />
 
             <hr style={{ border: "lightgray dashed 1px" }} />
 
-            {
-                order.status === "AWAITING_PAYMENT" &&
+            {order.status === "AWAITING_PAYMENT" && (
                 <OrderPaySection
                     order={order}
                     selectedCards={selectedCards}
@@ -244,9 +200,47 @@ export function OrderContent() {
                     handleRemoveCard={handleRemoveCard}
                     isValidPayment={isValidPayment}
                 />
-            }
+            )}
+
+            <OrderItemsSection items={order.items} />
+
+            <div style={{ display: "flex", justifyContent: "center" }}>
+                {
+                    order.status === "DELIVERED" && (
+                        <Button
+                            bgColor="var( --warning-1)"
+                            height="36px"
+                            maxWidth="200px"
+                            onClick={() => setReturnModalOpen(true)}
+                        >
+                            Solicitar devolução
+                        </Button>
+                    )
+                }
+            </div>
+
+            <ReturnOrderModal
+                isOpen={returnModalOpen}
+                onClose={() => setReturnModalOpen(false)}
+                order={order}
+                onSubmit={createReturning}
+            />
 
 
+            <AlertModal
+                isOpen={alertModal}
+                title="Certeza que deseja cancelar esse pedido?"
+                onConfirm={handleCancelOrder}
+                onCancel={() => setAlertModal(false)}
+                message="Essa ação não poderá ser desfeita."
+            />
+
+            <Toast
+                isOpen={toastOpen}
+                message={toastData.message}
+                type={toastData.type}
+                onClose={() => setToastOpen(false)}
+            />
 
             <SelectCardsModal
                 isOpen={cardModalOpen}

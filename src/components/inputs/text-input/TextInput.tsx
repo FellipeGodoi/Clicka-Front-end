@@ -25,7 +25,7 @@ type AfterBlurConfig = {
 
 interface TextInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string
+  label?: string
   mask?: MaskType
   afterBlur?: AfterBlurConfig
   maxWidth?: string
@@ -64,7 +64,10 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 
     return (
       <div className={styles.container} style={{ maxWidth }}>
-        <label className={styles.label}>{label}</label>
+        {
+          !!label && <label className={styles.label}>{label}</label>
+        }
+        
 
         <input
           ref={ref}

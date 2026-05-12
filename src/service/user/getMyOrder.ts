@@ -30,6 +30,9 @@ export interface OrderResponse {
   }
 
   items: {
+    availableReturnQuantity: number,
+    canReturn: boolean
+    id: string
     batchCode: string
     productId: string
     productName: string

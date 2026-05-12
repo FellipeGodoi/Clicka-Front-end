@@ -1,7 +1,7 @@
 const valueCard1 = ' 774.70'
 const valueCard2 = '10.00'
 
-const id = '1db20754-1415-4af5-8f81-1e12a596c10a'
+const id = 'a0c92d17-9b76-4750-9c44-d53e1dd764eb'
 
 const url = '/profile/order/'
 
@@ -30,7 +30,6 @@ it('Deve realizar o pagamento', () => {
     //seleciona cartao
     cy.get('#select-card-0').click()
     cy.get('#select-card-1').click()
-    
     cy.get('#confirm-card-button').click()
 
 

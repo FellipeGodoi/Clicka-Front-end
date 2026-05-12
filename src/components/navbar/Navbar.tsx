@@ -8,6 +8,7 @@ import users from "@/media/icons/users-icon.svg"
 import doc from "@/media/icons/doc.svg"
 import dashs from "@/media/icons/dashboards-icon.svg"
 import check from "@/media/icons/check-icon.svg"
+import refund from "@/media/icons/refund-icon.svg"
 
 import settings from "@/media/icons/settings-icon.svg"
 import exit from "@/media/icons/sair.svg"
@@ -26,6 +27,7 @@ export default function Navbar() {
         { label: "Usuários", path: "/users", icon: users, width: 22  },
         { label: "Produtos", path: "/products", icon: doc, width: 16  },
         { label: "Pedidos", path: "/orders", icon: check, width: 20  },
+        { label: "Devoluções", path: "/refunds", icon: refund, width: 22  },
         { label: "Relatórios", path: "/dashboards", icon:  dashs, width: 23  },
     ];
 

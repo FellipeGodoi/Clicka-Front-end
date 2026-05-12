@@ -71,7 +71,7 @@ const reloadProfile = async () => {
   }
 
   return (
-    <PageContainer gap={16}>
+    <PageContainer gap={16} >
       <LoadingOverlay isLoading={loading} />
 
       <PersonalDataSection

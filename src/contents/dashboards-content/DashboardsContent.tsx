@@ -15,6 +15,7 @@ import { useState } from "react"
 import { DateInput } from "@/components/inputs/date-input/DateInput"
 import TextInput from "@/components/inputs/text-input/TextInput"
 import { Button } from "@/components/button/Button"
+import AdminContainer from "@/components/layout/AdminContainer"
 
 interface ChartData {
     month: string
@@ -38,8 +39,7 @@ const DashboardsContent = () => {
     const [addProd, setAddProd] = useState <string> ('')
 
     return (
-        <div className={styles.container}>
-            <span className={styles.title}>Dashboards</span>
+        <AdminContainer title="Dashboards">
 
             <div style={{display:"flex", gap: 24}}>
                 <DateInput id="init" label="Data de inicio" value={initialDate} width="200px" onChange={(e) => setInitialDate(e)}/>
@@ -95,7 +95,7 @@ const DashboardsContent = () => {
                 </div>
             </div>
 
-        </div>
+        </AdminContainer>
     )
 }
 
