@@ -47,3 +47,9 @@
     cy.get('[name="password"]').type('123456')
     cy.get('button[type="submit"]').click()
   }
+
+    export function alternativeLogin() {
+    cy.get('[name="email"]').type('novoUsuario@email.com')
+    cy.get('[name="password"]').type('123@Abcd')
+    cy.get('button[type="submit"]').click()
+  }
