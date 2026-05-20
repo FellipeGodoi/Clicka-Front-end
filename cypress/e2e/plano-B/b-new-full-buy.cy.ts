@@ -23,6 +23,9 @@ it('Plano B - new full buy', () => {
     cy.get('#add-to-cart').click();
     cy.wait(time);
 
+    cy.visit('/cart')
+    cy.wait(time + 2000);
+
     cy.get('#cart-button svg').click();
     cy.wait(time);
 
