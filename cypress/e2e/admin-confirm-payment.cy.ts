@@ -1,9 +1,10 @@
 import { admLogin } from "../support/commands"
 
  it('O administrador confirma o pagamento', () => {
-        cy.visit('/auth')
+        cy.visit('/auth');
             
-        admLogin()
+        admLogin();
+        
         
         cy.visit('/orders')
         cy.get('button.style_addButton__mmPUi').click();
