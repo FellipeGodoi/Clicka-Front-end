@@ -49,5 +49,5 @@ it('plano B - usuario cancelando pedido de compra', () => {
 
         cy.get('div.style_grid__mHd5v').click();
         cy.wait(time);
-        
+        cy.end()
 })

@@ -2,12 +2,16 @@ import { alternativeLogin, randomName } from "../../support/commands";
 
 const time = 1500
 
+const log = () => {
+    return (alternativeLogin())
+}
+
 it('Plano B - new full buy', () => {
 
     cy.visit('/auth');
     cy.wait(time);
 
-    alternativeLogin();
+    log();
     cy.wait(time);
 
     cy.visit('/');
