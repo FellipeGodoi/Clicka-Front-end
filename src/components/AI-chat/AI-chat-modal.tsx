@@ -33,7 +33,7 @@ export default function AiChatModal({
     const [messages, setMessages] = useState<Message[]>(([
         {
             sender: "bot",
-            text: "O que você quer melhorar? (Áudio, Digitação ou Precisão)"
+            text: "Opa como posso ajudar?"
         }
     ]));
 
