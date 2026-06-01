@@ -6,6 +6,8 @@ import banner02 from "@/media/images/banner-02.png"
 
 import mouse from "@/media/images/mouse-generic.png"
 import teclado from "@/media/images/teclado-generic.png"
+import fone from "@/media/images/fone-generic.png"
+
 
 import style from "./style.module.css"
 import PageContainer from "@/components/layout/PageContainer"
@@ -99,7 +101,7 @@ const ShopContent = () => {
                         <ProductCard
                             key={product.id}
                             id={product.id}
-                            image={mouse}
+                            image={fone}
                             name={product.name}
                             originalPrice={product.defaultPrice}
                             promotionalPrice={product.promotionalPrice}

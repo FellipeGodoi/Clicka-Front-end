@@ -7,6 +7,7 @@ export interface ProductResponse {
   defaultPrice: number
   promotionalPrice: number
   stockQuantity: number
+  type:string
   tags: string[]
 }
 
@@ -23,6 +24,33 @@ export async function getProductsByType(
   const response = await api.get<ProductPageResponse>(
     `/products?type=${type}&size=${size}&page=${page}`
   )
+
+  return response.data
+}
+
+
+export async function searchProducts(params: {
+  search: string
+  minPrice?: number
+  maxPrice?: number
+  type?: string
+  includeOutOfStock?: boolean
+  orderByPrice?: string
+  size?: number
+  page?: number
+}) {
+  const response = await api.get(`/products`, {
+    params: {
+      search: params.search,
+      minPrice: params.minPrice,
+      maxPrice: params.maxPrice,
+      type: params.type,
+      includeOutOfStock: params.includeOutOfStock,
+      orderByPrice: params.orderByPrice,
+      size: params.size,
+      page: params.page,
+    }
+  })
 
   return response.data
 }

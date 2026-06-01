@@ -19,6 +19,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
+      <head>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <link
+          href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css"
+          rel="stylesheet"
+        />
+        
+      </head>
+
       <body className={`${roboto.variable} antialiased`}>
         {children}
       </body>

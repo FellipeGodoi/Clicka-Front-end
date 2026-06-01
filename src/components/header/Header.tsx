@@ -28,7 +28,14 @@ const Header = () => {
     }
   }, [])
 
-  const {navigateTo} = useNavigate()
+  const { navigateTo } = useNavigate()
+
+  const [search, setSearch] = useState<string>('')
+
+  const handleSearch = () => {
+    if (!search.trim()) return
+    navigateTo(`/search?query=${encodeURIComponent(search)}`)
+  }
 
 
 
@@ -37,7 +44,7 @@ const Header = () => {
       <div className={styles.inner}>
 
         {/* Logo */}
-        <div className={styles.logo} style={{ cursor:"pointer"}} onClick={()=> navigateTo('/')}>
+        <div className={styles.logo} style={{ cursor: "pointer" }} onClick={() => navigateTo('/')}>
           <IconComponent
             Icon={logo}
             width={100}
@@ -51,9 +58,29 @@ const Header = () => {
             label=""
             placeholder="Buscar produtos..."
             type="text"
-
+            value={search}
+            onChange={(e: any) => setSearch(e.target.value)}
           />
+
+          <button 
+          disabled = {search === '' ? true : false }
+          onClick={handleSearch}
+          style={{
+            marginLeft: '8px',
+            padding: '10px 16px',
+            backgroundColor: search === '' ? '#498a72' : '#0D6444',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: search === '' ? 'not-allowed' : 'pointer',
+            fontWeight: 600
+          }}
+        >
+          BUSCAR
+        </button>
         </div>
+
+
 
         {/* Ações */}
         <div className={styles.actions}>
@@ -67,7 +94,7 @@ const Header = () => {
 
           {/* Perfil */}
           <button id='profile-button' className={styles.iconButton}>
-            <UserIcon width={24} height={24} onClick={() => navigateTo('/profile')}/>
+            <UserIcon width={24} height={24} onClick={() => navigateTo('/profile')} />
           </button>
 
         </div>

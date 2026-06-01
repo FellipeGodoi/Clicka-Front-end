@@ -9,12 +9,14 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.2.2",
     "axios": "^1.13.2",
     "cypress": "^15.14.2",
     "framer-motion": "^12.23.24",
     "next": "^15.5.9",
+    "openai": "^6.40.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "recharts": "^3.7.0",

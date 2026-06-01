@@ -1,4 +1,8 @@
 'use client'
+import mouse from "@/media/images/mouse-generic.png"
+import teclado from "@/media/images/teclado-generic.png"
+import fone from "@/media/images/fone-generic.png"
+
 
 import PageContainer from "@/components/layout/PageContainer"
 import styles from './style.module.css'
@@ -6,7 +10,7 @@ import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { LoadingOverlay } from "@/components/loading/LoadingOverlay"
 import { getProductById, ProductDetail } from "@/service/user/getProduct"
-
+import Image from "next/image";
 
 const ProductContent = () => {
     const params = useParams()
@@ -86,7 +90,17 @@ const ProductContent = () => {
 
                     <div className={styles.imageContainer}>
                         <div className={styles.imageMock}>
-                            {product.imageUrl}
+                            <Image
+                                src={
+                                    product.type.toLowerCase() === "mouse"
+                                        ? mouse
+                                        : product.type.toLowerCase() === "keyboard"
+                                            ? teclado
+                                            : fone
+                                }
+                                alt={product.name}
+                                style={{ objectFit: "contain", borderRadius: 16 }}
+                            />
                         </div>
                     </div>
 
