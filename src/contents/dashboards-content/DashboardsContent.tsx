@@ -1,102 +1,359 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 import {
+    ResponsiveContainer,
     LineChart,
     Line,
     XAxis,
     YAxis,
-    Tooltip,
     CartesianGrid,
-    ResponsiveContainer,
+    Tooltip,
     Legend
-} from "recharts"
-import styles from "./style.module.css"
-import { useState } from "react"
-import { DateInput } from "@/components/inputs/date-input/DateInput"
-import TextInput from "@/components/inputs/text-input/TextInput"
-import { Button } from "@/components/button/Button"
-import AdminContainer from "@/components/layout/AdminContainer"
+} from 'recharts'
 
-interface ChartData {
-    month: string
-    Notebook: number
-    Mouse: number
-    Teclado: number
-}
+import { ProductResponse } from '@/service/user/getProducts'
+import { DashboardGroupBy, getSalesDashboard, SalesDashboardResponse } from '@/service/admin/getSalesDashboard'
+import DashboardSearchInput from '@/components/inputs/dashboard-search-input/DashboardSearchInput'
+import AdminContainer from '@/components/layout/AdminContainer'
+import { formatChartData } from '@/utils/chart-utils'
+import { CustomTooltip } from './CustomTooltip'
 
-const mockChartData: ChartData[] = [
-    { month: "Jan", Notebook: 120, Mouse: 80, Teclado: 60 },
-    { month: "Fev", Notebook: 150, Mouse: 95, Teclado: 70 },
-    { month: "Mar", Notebook: 180, Mouse: 110, Teclado: 90 },
-    { month: "Abr", Notebook: 200, Mouse: 130, Teclado: 120 },
-    { month: "Mai", Notebook: 170, Mouse: 140, Teclado: 100 },
-    { month: "Jun", Notebook: 210, Mouse: 160, Teclado: 130 },
-]
+export default function DashboardContent() {
 
-const DashboardsContent = () => {
-    const [initialDate, setInitialDate] = useState <string> ('')
-    const [endDate, setEndDate] = useState <string> ('')
-    const [addProd, setAddProd] = useState <string> ('')
+    const DAY_RANGE = 30
+    const [products, setProducts] = useState<ProductResponse[]>([])
+
+    const [startDate, setStartDate] = useState('2026-01-01')
+    const [endDate, setEndDate] = useState('2026-12-01')
+
+    const [groupBy, setGroupBy] =
+        useState<DashboardGroupBy>('DAY')
+
+    const [chartData, setChartData] = useState<any[]>([])
+
+    useEffect(() => {
+
+        if (groupBy !== "DAY") {
+            return
+        }
+
+        const today = new Date()
+
+        const startDay = new Date()
+
+        startDay.setDate(
+            today.getDate() - (DAY_RANGE - 1)
+        )
+
+        setStartDate(
+            startDay
+                .toISOString()
+                .split('T')[0]
+        )
+
+        setEndDate(
+            today
+                .toISOString()
+                .split('T')[0]
+        )
+
+    }, [groupBy])
+
+        useEffect(() => {
+
+        if (groupBy !== "MONTH") {
+            return
+        }
+
+        const today = new Date()
+        setStartDate('2026-01-01')
+        setEndDate(
+            today
+                .toISOString()
+                .split('T')[0]
+        )
+
+    }, [groupBy])
+
+    async function handleSearch() {
+        try {
+            const response = await getSalesDashboard({
+                products: products.map((p) => p.id),
+                startDate,
+                endDate,
+                groupBy
+            })
+            const formatted = formatChartData(response)
+
+            setChartData(formatted)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async function addProduct(
+        product: ProductResponse
+    ) {
+
+        const alreadyExists = products.some(
+            p => p.id === product.id
+        )
+
+        if (alreadyExists) {
+            return
+        }
+
+        const updatedProducts = [
+            ...products,
+            product
+        ]
+
+        setProducts(updatedProducts)
+
+        try {
+
+            const response =
+                await getSalesDashboard({
+                    products: updatedProducts.map(
+                        p => p.id
+                    ),
+                    startDate,
+                    endDate,
+                    groupBy
+                })
+
+            const formatted =
+                formatChartData(response)
+
+            setChartData(formatted)
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+
+    async function removeProduct(productId: string) {
+
+        const updatedProducts = products.filter(
+            product => product.id !== productId
+        )
+
+        setProducts(updatedProducts)
+
+        try {
+
+            const response =
+                await getSalesDashboard({
+                    products: updatedProducts.map(
+                        p => p.id
+                    ),
+                    startDate,
+                    endDate,
+                    groupBy
+                })
+
+            const formatted =
+                formatChartData(response)
+
+            setChartData(formatted)
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const lineKeys =
+        chartData.length > 0
+            ? Object.keys(chartData[0])
+                .filter(key => key !== "period")
+            : []
 
     return (
-        <AdminContainer title="Dashboards">
+        <AdminContainer title='Dashboard'>
+            <DashboardSearchInput
+                onSelect={addProduct}
+            />
+            <div
+                style={{
+                    display: "flex",
+                    gap: "12px",
+                    alignItems: "end",
+                    flexWrap: "wrap",
+                    marginBottom: "20px"
+                }}
+            >
+                {
+                    groupBy === "MONTH" && (
+                        <>
+                            <div>
+                                <label>Data inicial</label>
+                                <input
+                                    type="date"
+                                    value={startDate}
+                                    onChange={(e) =>
+                                        setStartDate(e.target.value)
+                                    }
+                                    style={{
+                                        display: "block",
+                                        padding: "8px"
+                                    }}
+                                />
+                            </div>
 
-            <div style={{display:"flex", gap: 24}}>
-                <DateInput id="init" label="Data de inicio" value={initialDate} width="200px" onChange={(e) => setInitialDate(e)}/>
-                <DateInput id="init" label="Data final" value={endDate}  width="200px"  onChange={(e) => setEndDate(e)}/>
+                            <div>
+                                <label>Data final</label>
+                                <input
+                                    type="date"
+                                    value={endDate}
+                                    onChange={(e) =>
+                                        setEndDate(e.target.value)
+                                    }
+                                    style={{
+                                        display: "block",
+                                        padding: "8px"
+                                    }}
+                                />
+                            </div>
+
+                        </>
+                    )
+                }
+
+
+                <div>
+                    <label>Agrupar por</label>
+                    <select
+                        value={groupBy}
+                        onChange={(e) =>
+                            setGroupBy(
+                                e.target.value as DashboardGroupBy
+                            )
+                        }
+                        style={{
+                            display: "block",
+                            padding: "8px"
+                        }}
+                    >
+                        <option value="DAY">Dia</option>
+                        <option value="MONTH">Mês</option>
+                    </select>
+                </div>
+
+                <button
+                    onClick={handleSearch}
+                    style={{
+                        padding: "10px 20px",
+                        cursor: "pointer",
+                        borderRadius: "6px",
+                        border: "none"
+                    }}
+                >
+                    Buscar
+                </button>
             </div>
 
-            <div className={styles.card}>
-                <div style={{display:"flex", justifyContent:"space-between", width:"100%", alignItems:"center"}}>
-                    <span className={styles.subTitle} style={{height:"100%"}}>Venda de produtos  </span>
-                    <div style={{display:"flex", justifyContent:"flex-end", gap:12, alignItems:"flex-end", width:"50%"}}>
-                    <TextInput maxWidth="400px" id="add-prod" label="Adicionar produto" placeholder="Digite o codigo do produto"/>
-                    <Button maxWidth="190px" height="40px" ftColor="white" bgColor="var(--dark-blue-100)"> Buscar </Button>
-                    </div>
-                </div>
-                <div className={styles.chartContainer}>
-                    <ResponsiveContainer>
-                        <LineChart data={mockChartData}>
-                            <CartesianGrid
-                                stroke="var(--neutral-20)"
-                                strokeDasharray="3 3"
-                            />
-                            <XAxis
-                                dataKey="month"
-                                stroke="var(--neutral-60)"
-                            />
-                            <YAxis
-                                stroke="var(--neutral-60)"
-                            />
-                            <Legend />
-                            <Line
-                                type="monotone"
-                                dataKey="Notebook"
-                                stroke="var(--light-blue-100)"
-                                strokeWidth={3}
-                                dot={{ r: 4 }}
-                            />
-                            <Line
-                                type="monotone"
-                                dataKey="Mouse"
-                                stroke="var(--yellow-100)"
-                                strokeWidth={3}
-                                dot={{ r: 4 }}
-                            />
-                            <Line
-                                type="monotone"
-                                dataKey="Teclado"
-                                stroke="var(--dark-blue-100)"
-                                strokeWidth={3}
-                                dot={{ r: 4 }}
-                            />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
+            <div style={{ height: 500, padding: "0px 40px" }}>
+                <ResponsiveContainer
+                    width="100%"
+                    height="100%"
+                >
+                    <LineChart data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+
+                        <XAxis dataKey="period" />
+
+                        <YAxis />
+
+                        <Tooltip content={<CustomTooltip />} />
+
+                        {
+                            lineKeys.map(key => (
+                                <Line
+                                    key={key}
+                                    type="monotone"
+                                    dataKey={key}
+                                    strokeWidth={3}
+                                />
+                            ))
+                        }
+                    </LineChart>
+                </ResponsiveContainer>
             </div>
 
+            <div
+                style={{
+                    marginTop: "24px",
+                    padding: "20px",
+                    border: "1px solid #ddd",
+                    borderRadius: "8px"
+                }}
+            >
+                <h3
+                    style={{
+                        marginBottom: "12px"
+                    }}
+                >
+                    Produtos selecionados
+                </h3>
+
+                {
+                    products.length === 0 && (
+                        <p>
+                            Nenhum produto selecionado
+                        </p>
+                    )
+                }
+
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px"
+                    }}
+                >
+                    {
+                        products.map(product => (
+                            <div
+                                key={product.id}
+                                style={{
+                                    display: "flex",
+                                    justifyContent:
+                                        "space-between",
+                                    alignItems: "center",
+                                    padding: "10px",
+                                    border: "1px solid #eee",
+                                    borderRadius: "6px"
+                                }}
+                            >
+                                <span>
+                                    {product.name}
+                                </span>
+
+                                <button
+                                    onClick={() =>
+                                        removeProduct(
+                                            product.id
+                                        )
+                                    }
+                                    style={{
+                                        border: "none",
+                                        cursor: "pointer",
+                                        padding:
+                                            "6px 10px",
+                                        borderRadius:
+                                            "4px"
+                                    }}
+                                >
+                                    ❌
+                                </button>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
         </AdminContainer>
     )
 }
-
-export default DashboardsContent

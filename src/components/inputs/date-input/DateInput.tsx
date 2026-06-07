@@ -11,16 +11,25 @@ type MaskedInputProps = {
   valueSize?: string;
   error?: boolean;
   errorMessage?: string | string[];
+  maskType?: MaskType;
 };
 
 const formatDate = (value: string) => {
   return value
-    .replace(/\D/g, "") 
-    .replace(/(\d{2})(\d)/, "$1/$2") 
+    .replace(/\D/g, "")
     .replace(/(\d{2})(\d)/, "$1/$2")
-    .replace(/(\d{4})(\d)/, "$1"); 
+    .replace(/(\d{2})(\d)/, "$1/$2")
+    .replace(/(\d{4})(\d)/, "$1");
 };
 
+const formatMonthYear = (value: string) => {
+  return value
+    .replace(/\D/g, "")
+    .replace(/(\d{2})(\d)/, "$1/$2")
+    .replace(/(\d{4})(\d)/, "$1");
+};
+
+type MaskType = "DATE" | "MONTH_YEAR";
 
 
 export const DateInput: React.FC<MaskedInputProps> = ({
@@ -33,11 +42,19 @@ export const DateInput: React.FC<MaskedInputProps> = ({
   valueSize = "18px",
   error = false,
   errorMessage,
+  maskType = "DATE"
 }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatDate(e.target.value);
-    onChange?.(formatted);
-  };
+const handleChange = (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+
+  const formatted =
+    maskType === "MONTH_YEAR"
+      ? formatMonthYear(e.target.value)
+      : formatDate(e.target.value);
+
+  onChange?.(formatted);
+};
 
   return (
     <div className={styles.inputContainer} style={{width:width}}>
