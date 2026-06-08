@@ -34,6 +34,20 @@ export function CustomTooltip({
                         <div>
                             Qtd vendas: {item.value}
                         </div>
+
+                        {
+                            item.value > 0 && (
+                                <div>
+                                    Valor médio: R$ {
+                                        item.payload[
+                                            `${item.name}_averagePrice`
+                                        ]?.toFixed(2)
+                                    }
+                                </div>
+                            )
+                        }
+
+
                     </div>
                 ))}
             </div>

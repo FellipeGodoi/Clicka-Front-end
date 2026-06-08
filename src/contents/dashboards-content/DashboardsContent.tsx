@@ -165,12 +165,15 @@ export default function DashboardContent() {
         }
     }
 
-    const lineKeys =
-        chartData.length > 0
-            ? Object.keys(chartData[0])
-                .filter(key => key !== "period")
-            : []
-
+const lineKeys =
+    chartData.length > 0
+        ? Object.keys(chartData[0])
+            .filter(
+                key =>
+                    key !== "period" &&
+                    !key.endsWith("_averagePrice")
+            )
+        : []
     return (
         <AdminContainer title='Dashboard'>
             <DashboardSearchInput
@@ -279,10 +282,10 @@ export default function DashboardContent() {
                 <button
                     onClick={handleSearch}
                     style={{
-                        padding: "10px 20px",
+                        padding: "5px 20px",
                         cursor: "pointer",
                         borderRadius: "6px",
-                        border: "none"
+                        border: "1px solid black"
                     }}
                 >
                     Buscar

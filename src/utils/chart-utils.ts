@@ -26,8 +26,12 @@ export function formatChartData(
             periodsMap.set(item.period, row)
         }
 
-        periodsMap.get(item.period)[item.productName] =
-            item.quantitySold
+        const row = periodsMap.get(item.period)
+
+        row[item.productName] = item.quantitySold
+
+        row[`${item.productName}_averagePrice`] =
+            item.averagePrice
     })
 
     return Array.from(periodsMap.values())

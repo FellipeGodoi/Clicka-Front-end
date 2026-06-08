@@ -100,12 +100,12 @@ const CartStep = ({
             <strong>R$ {total.toFixed(2)}</strong>
           </div>
 
-          <button
+          {/* <button
             className={styles.continueButton}
             onClick={onContinue}
           >
             Continuar
-          </button>
+          </button> */}
         </div>
 
       </div>
