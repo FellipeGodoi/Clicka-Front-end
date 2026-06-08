@@ -6,6 +6,8 @@ import ProductCard from "../layout/ProductCard";
 import mouse from "@/media/images/mouse-generic.png"
 import teclado from "@/media/images/teclado-generic.png"
 import fone from "@/media/images/fone-generic.png"
+import { CursorIcon } from "@/media/icon-component/CursorIcon";
+import { FullLogoIcon } from "@/media/icon-component/FullLogoIcon";
 
 
 interface AiChatModalProps {
@@ -145,10 +147,14 @@ export default function AiChatModal({
                 <div
                     style={{
                         padding: "16px",
-                        borderBottom: "1px solid #ddd"
+                        borderBottom: "1px solid #ddd",
+                        display:"flex",
+                        flexDirection:"row",
+                        justifyContent:"space-between"
                     }}
                 >
                     <h2>Assistente de Compras</h2>
+                    <FullLogoIcon height={20} width={70} fill={"#0D3B5D"}/>
                 </div>
 
                 <div

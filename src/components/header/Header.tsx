@@ -11,6 +11,7 @@ import {
   UserIcon
 } from '@heroicons/react/24/outline'
 import { useNavigate } from '@/utils/hooks/UseNavigate'
+import { FullLogoIcon } from '@/media/icon-component/FullLogoIcon'
 
 const Header = () => {
   const [hasCartItems, setHasCartItems] = useState(false)
@@ -45,11 +46,7 @@ const Header = () => {
 
         {/* Logo */}
         <div className={styles.logo} style={{ cursor: "pointer" }} onClick={() => navigateTo('/')}>
-          <IconComponent
-            Icon={logo}
-            width={100}
-            height={40}
-          />
+          <FullLogoIcon height={40} width={125}fill={"#0D3B5D"}/>
         </div>
 
         {/* Busca */}

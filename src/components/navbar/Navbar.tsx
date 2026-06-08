@@ -15,6 +15,8 @@ import exit from "@/media/icons/sair.svg"
 
 import { useNavigate } from "@/utils/hooks/UseNavigate";
 import { IconComponent } from "@/contents/renders/IconComponent";
+import { FullLogoIcon } from "@/media/icon-component/FullLogoIcon";
+import { CursorIcon } from "@/media/icon-component/CursorIcon";
 
 export default function Navbar() {
     const pathname = usePathname();
@@ -24,8 +26,8 @@ export default function Navbar() {
     const [exitModal, setExitModal] = useState(false);
 
     const navItems = [
-        { label: "Usuários", path: "/users", icon: users, width: 22  },
-        { label: "Produtos", path: "/products", icon: doc, width: 16  },
+        // { label: "Usuários", path: "/users", icon: users, width: 22  },
+        // { label: "Produtos", path: "/products", icon: doc, width: 16  },
         { label: "Pedidos", path: "/orders", icon: check, width: 20  },
         { label: "Devoluções", path: "/refunds", icon: refund, width: 22  },
         { label: "Relatórios", path: "/dashboards", icon:  dashs, width: 23  },
@@ -68,7 +70,9 @@ export default function Navbar() {
                 {/* Logo */}
                 <div className={styles.logoContainer}>
                     {/* {!isExpanded ? <IconComponent Icon={logoS} width={62} height={62} /> : <IconComponent Icon={logoH} width={178} height={81} />} */}
-                    Clicka
+                    {
+                        isExpanded ? <FullLogoIcon height={40} fill="#0D3B5D"/> : <CursorIcon height={40} fill="#0D3B5D"/>
+                    }
                 </div>
 
                 

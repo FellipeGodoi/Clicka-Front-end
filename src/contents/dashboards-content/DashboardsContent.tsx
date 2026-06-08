@@ -61,7 +61,7 @@ export default function DashboardContent() {
 
     }, [groupBy])
 
-        useEffect(() => {
+    useEffect(() => {
 
         if (groupBy !== "MONTH") {
             return
@@ -188,54 +188,88 @@ export default function DashboardContent() {
                 {
                     groupBy === "MONTH" && (
                         <>
-                            <div>
-                                <label>Data inicial</label>
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium">
+                                    Data inicial
+                                </label>
+
                                 <input
                                     type="date"
                                     value={startDate}
-                                    onChange={(e) =>
-                                        setStartDate(e.target.value)
-                                    }
+                                    onChange={(e) => setStartDate(e.target.value)}
                                     style={{
-                                        display: "block",
-                                        padding: "8px"
+                                        padding: "0px 10px"
                                     }}
+                                    className="
+        h-[35px]
+
+        border
+        border-gray-300
+        rounded-md
+        text-sm
+        outline-none
+        focus:border-blue-500
+        appearance-none
+        [&::-webkit-calendar-picker-indicator]:hidden
+      "
                                 />
                             </div>
 
-                            <div>
-                                <label>Data final</label>
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium">
+                                    Data final
+                                </label>
+
                                 <input
                                     type="date"
                                     value={endDate}
-                                    onChange={(e) =>
-                                        setEndDate(e.target.value)
-                                    }
                                     style={{
-                                        display: "block",
-                                        padding: "8px"
+                                        padding: "0px 10px"
                                     }}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    className="
+        h-[35px]
+        border
+        border-gray-300
+        rounded-md
+        text-sm
+        outline-none
+        focus:border-blue-500
+        appearance-none
+        [&::-webkit-calendar-picker-indicator]:hidden
+      "
                                 />
                             </div>
-
                         </>
                     )
                 }
 
 
-                <div>
-                    <label>Agrupar por</label>
+                <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium">
+                        Agrupar por
+                    </label>
+
                     <select
                         value={groupBy}
-                        onChange={(e) =>
-                            setGroupBy(
-                                e.target.value as DashboardGroupBy
-                            )
-                        }
                         style={{
-                            display: "block",
-                            padding: "8px"
+                            padding: "0px 10px"
                         }}
+                        onChange={(e) =>
+                            setGroupBy(e.target.value as DashboardGroupBy)
+                        }
+                        className="
+                            h-[35px]
+                            border
+                            border-gray-300
+                            rounded-md
+                            text-sm
+                            outline-none
+                            bg-white
+                            focus:border-blue-500
+                            appearance-none
+                            cursor-pointer
+                            "
                     >
                         <option value="DAY">Dia</option>
                         <option value="MONTH">Mês</option>
@@ -347,7 +381,7 @@ export default function DashboardContent() {
                                             "4px"
                                     }}
                                 >
-                                    ❌
+                                    <i className="ri-delete-bin-line" style={{ fontSize: "24px" }} />
                                 </button>
                             </div>
                         ))

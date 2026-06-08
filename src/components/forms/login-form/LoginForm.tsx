@@ -37,7 +37,7 @@ const LoginForm = () => {
       }
 
       if (response.role === "ROLE_ADMIN") {
-        router.push("/users")
+        router.push("/orders")
       }
 
     } catch (error) {
