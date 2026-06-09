@@ -313,15 +313,15 @@ export default function AdminOrderDetailsModal({
                     }}
                 >
                     <p>
-                        {order.address.street}, {order.address.number}
+                        {order.address?.street || '--'}, {order.address?.number || '--'}
                     </p>
 
                     <p>
-                        {order.address.neighborhood} - {order.address.city}/{order.address.state}
+                        {order.address?.neighborhood || '--'} - {order.address?.city}/{order.address?.state|| '--'}
                     </p>
 
                     <p>
-                        CEP: {order.address.zipCode}
+                        CEP: {order.address?.zipCode|| '--'}
                     </p>
                 </div>
 
@@ -336,11 +336,11 @@ export default function AdminOrderDetailsModal({
                     }}
                 >
                     <p>
-                        {order.phone.nickname}
+                        {order.phone?.nickname  || "--"}
                     </p>
 
                     <p>
-                        {order.phone.number}
+                        {order.phone?.number || "--"}
                     </p>
                 </div>
 
@@ -374,19 +374,19 @@ export default function AdminOrderDetailsModal({
                                         marginBottom: "8px"
                                     }}
                                 >
-                                    {item.productName}
+                                    {item?.productName}
                                 </h3>
 
                                 <p>
-                                    Tipo: {item.productType}
+                                    Tipo: {item?.productType}
                                 </p>
 
                                 <p>
-                                    Quantidade: {item.quantity}
+                                    Quantidade: {item?.quantity}
                                 </p>
 
                                 <p>
-                                    Lote: {item.batchCode}
+                                    Lote: {item?.batchCode}
                                 </p>
                             </div>
 
@@ -396,7 +396,7 @@ export default function AdminOrderDetailsModal({
                                 </p>
 
                                 <strong>
-                                    R$ {Number(item.unitPrice).toFixed(2)}
+                                    R$ {Number(item?.unitPrice).toFixed(2)}
                                 </strong>
 
                                 <p style={{ marginTop: "12px" }}>
@@ -404,7 +404,7 @@ export default function AdminOrderDetailsModal({
                                 </p>
 
                                 <strong>
-                                    R$ {Number(item.subtotal).toFixed(2)}
+                                    R$ {Number(item?.subtotal).toFixed(2)}
                                 </strong>
                             </div>
 
