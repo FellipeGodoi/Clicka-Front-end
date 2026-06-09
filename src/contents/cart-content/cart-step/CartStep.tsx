@@ -4,6 +4,10 @@ import { useMemo } from "react"
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline"
 import styles from "../style.module.css"
 import { CartItemInterface } from "@/interfaces/front-interfaces/Cart.front.interface"
+import mouse from "@/media/images/mouse-generic.png"
+import teclado from "@/media/images/teclado-generic.png"
+import fone from "@/media/images/fone-generic.png"
+import Image from "next/image"
 
 interface CartStepProps {
   cartItems: CartItemInterface[]
@@ -11,6 +15,29 @@ interface CartStepProps {
   removeItem: (productId: string) => void
   clearCart: () => void
   onContinue: () => void
+}
+const getProductImage = (name: string) => {
+  const productName = name.toLowerCase()
+
+  if (productName.includes("mouse")) {
+    return mouse
+  }
+
+  if (
+    productName.includes("teclado") ||
+    productName.includes("keyboard")
+  ) {
+    return teclado
+  }
+
+  if (
+    productName.includes("fone") ||
+    productName.includes("headset")
+  ) {
+    return fone
+  }
+
+  return mouse
 }
 
 const CartStep = ({
@@ -35,9 +62,11 @@ const CartStep = ({
 
           <div className={styles.itemContent}>
             <div className={styles.imageWrapper}>
-              <img
-                src="/"
+              <Image
+                src={getProductImage(item.name)}
                 alt={item.name}
+                width={100}
+                height={100}
               />
             </div>
 
