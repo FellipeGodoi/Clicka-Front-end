@@ -17,6 +17,7 @@ import { useNavigate } from "@/utils/hooks/UseNavigate";
 import { IconComponent } from "@/contents/renders/IconComponent";
 import { FullLogoIcon } from "@/media/icon-component/FullLogoIcon";
 import { CursorIcon } from "@/media/icon-component/CursorIcon";
+import { logout } from "@/service/auth/logout";
 
 export default function Navbar() {
     const pathname = usePathname();
@@ -57,6 +58,11 @@ export default function Navbar() {
         path: "/settings",
         icon: settings,
     };
+
+    const handlerLogout = () => {
+        logout()
+        navigateTo("/auth")
+    }
 
     return (
         <nav
@@ -181,7 +187,7 @@ export default function Navbar() {
                     );
                 })()}
                 <div
-                    onClick={() => setExitModal(true)}
+                    onClick={handlerLogout}
                     onMouseEnter={() => setHoveredPath(LOGOUT_PATH)}
                     onMouseLeave={() => setHoveredPath(null)}
                     style={{

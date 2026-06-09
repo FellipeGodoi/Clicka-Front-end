@@ -208,6 +208,7 @@ export default function AiChatModal({
                             name={recommendedProduct.name}
                             originalPrice={recommendedProduct.defaultPrice}
                             promotionalPrice={recommendedProduct.promotionalPrice}
+                            onClose={onClose}
                         />
                     )}
                 </div>

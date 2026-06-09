@@ -72,6 +72,7 @@ const InformationStep = ({
             })
 
             router.push(`/profile/order/${response.id}`)
+            localStorage.removeItem('cart')
 
         } catch (error) {
             console.error("Erro ao criar pedido", error)

@@ -221,6 +221,7 @@ const lineKeys = Array.from(
     )
 ).filter(key => key !== 'period')
 
+
     return (
         <AdminContainer title='Dashboard Categorias'>
 
@@ -230,7 +231,6 @@ const lineKeys = Array.from(
                     gap: '12px',
                     alignItems: 'end',
                     flexWrap: 'wrap',
-                    marginBottom: '20px'
                 }}
             >
 
@@ -245,6 +245,21 @@ const lineKeys = Array.from(
 
                                 <input
                                     type="date"
+                                    style={{
+                                        padding: "0px 10px"
+                                    }}
+                                    className="
+        h-[35px]
+
+        border
+        border-gray-300
+        rounded-md
+        text-sm
+        outline-none
+        focus:border-blue-500
+        appearance-none
+        [&::-webkit-calendar-picker-indicator]:hidden
+      "
                                     value={startDate}
                                     onChange={(e) =>
                                         setStartDate(
@@ -254,7 +269,7 @@ const lineKeys = Array.from(
                                 />
                             </div>
 
-                            <div className="flex flex-col gap-1">
+                            <div  className="flex flex-col gap-1">
 
                                 <label>
                                     Data final
@@ -262,6 +277,21 @@ const lineKeys = Array.from(
 
                                 <input
                                     type="date"
+                                    style={{
+                                        padding: "0px 10px"
+                                    }}
+                                    className="
+        h-[35px]
+
+        border
+        border-gray-300
+        rounded-md
+        text-sm
+        outline-none
+        focus:border-blue-500
+        appearance-none
+        [&::-webkit-calendar-picker-indicator]:hidden
+      "
                                     value={endDate}
                                     onChange={(e) =>
                                         setEndDate(
@@ -281,6 +311,20 @@ const lineKeys = Array.from(
                     </label>
 
                     <select
+                    style={{padding:"0px 10px"}}
+                    className="
+                            h-[35px]
+                            border
+                            border-gray-300
+                            rounded-md
+                            text-sm
+                            outline-none
+                            bg-white
+                            focus:border-blue-500
+                            appearance-none
+                            cursor-pointer
+                            "
+                        
                         value={groupBy}
                         onChange={(e) =>
                             setGroupBy(
@@ -292,13 +336,18 @@ const lineKeys = Array.from(
                             Dia
                         </option>
 
-                        <option value="MONTH">
+                        <option  value="MONTH">
                             Mês
                         </option>
                     </select>
                 </div>
 
                 <button
+                    style={{border: "1px solid black",
+                            borderRadius:"5px",
+                            padding:"4px 10px",
+                            cursor:"pointer"
+                    }}
                     onClick={handleSearch}
                 >
                     Buscar

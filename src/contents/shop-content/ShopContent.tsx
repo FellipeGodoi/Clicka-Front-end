@@ -46,9 +46,9 @@ const ShopContent = () => {
         <PageContainer>
             <PageBanner
                 banners={[
-                    { image: banner01, link: "/" },
-                    { image: banner02, link: "/" },
-                    { image: banner01, link: "/" },
+                    { image: banner01, link: "/search?query=economico" },
+                    { image: banner02, link: "/search?query=pro" },
+                    { image: banner01, link: "/search?query=elite" },
                 ]}
             />
 

@@ -10,6 +10,7 @@ interface ProductCardProps {
   originalPrice: number
   promotionalPrice?: number
   id: string
+  onClose?: () => void
 }
 
 const ProductCard = ({
@@ -18,12 +19,18 @@ const ProductCard = ({
   originalPrice,
   promotionalPrice,
   id,
+  onClose = () => null
 }: ProductCardProps) => {
   const hasPromotion = promotionalPrice !== undefined && promotionalPrice !== null
   const { navigateTo } = useNavigate()
 
+  const handleNavigate  = () => {
+       navigateTo('/product/' + id)
+       onClose()
+  }
+
   return (
-    <div  id={`prod-card-${id}`} className={styles.card} onClick={() => navigateTo('/product/' + id)}>
+    <div  id={`prod-card-${id}`} className={styles.card} onClick={handleNavigate}>
 
       <div className={styles.imageWrapper}>
         <Image
