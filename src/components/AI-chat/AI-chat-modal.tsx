@@ -39,95 +39,108 @@ export default function AiChatModal({
         }
     ]));
 
+    const openAiMessages = messages.map(message => ({
+        role:
+            message.sender === "user"
+                ? "user"
+                : "assistant",
+        content: message.text,
+    }));
+
     const [input, setInput] = useState("");
-    const [step, setStep] = useState(1);
 
-    const [objective, setObjective] = useState("");
-
-    const [recommendedProduct, setRecommendedProduct] =
-        useState<Product | null>(null);
+    const [recommendedProducts, setRecommendedProducts] =
+        useState<Product[]>([]);
 
     const sendMessage = async () => {
+        setRecommendedProducts([])
         if (!input.trim()) return;
 
-        const answer = input.trim();
+        const userMessage: Message = {
+            sender: "user",
+            text: input.trim(),
+        };
 
-        setMessages(prev => [
-            ...prev,
-            {
-                sender: "user",
-                text: answer
-            }
-        ]);
+        const updatedMessages = [
+            ...messages,
+            userMessage,
+        ];
 
+        setMessages(updatedMessages);
         setInput("");
 
-        if (step === 1) {
-            setObjective(answer);
+        try {
+            const response = await fetch(
+                "/api/chat-ai",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                    },
+                    body: JSON.stringify({
+                        messages: updatedMessages.map(
+                            message => ({
+                                role:
+                                    message.sender ===
+                                        "user"
+                                        ? "user"
+                                        : "assistant",
+                                content:
+                                    message.text,
+                            })
+                        ),
+                    }),
+                }
+            );
+
+            const data =
+                await response.json();
 
             setMessages(prev => [
                 ...prev,
                 {
                     sender: "bot",
-                    text: "Você procura algo Econômico, Intermediário ou Premium?"
-                }
+                    text: data.message,
+                },
             ]);
 
-            setStep(2);
-            return;
-        }
-        if (step === 2) {
-            try {
-                setMessages(prev => [
+            if (data.products?.length) {
+                setRecommendedProducts(prev => [
                     ...prev,
-                    {
-                        sender: "bot",
-                        text: "Analisando catálogo..."
-                    }
-                ]);
-
-                const response = await fetch("/api/chat-ai", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        objective,
-                        profile: answer
-                    }),
-                });
-
-                if (!response.ok) {
-                    throw new Error("Erro ao consultar IA");
-                }
-
-                const data = await response.json();
-
-                setRecommendedProduct(data.product);
-
-                setMessages(prev => [
-                    ...prev,
-                    {
-                        sender: "bot",
-                        text: data.reason,
-                    },
-                ]);
-
-                setStep(3);
-            } catch (error) {
-                console.error(error);
-
-                setMessages(prev => [
-                    ...prev,
-                    {
-                        sender: "bot",
-                        text: "Erro ao gerar recomendação.",
-                    },
+                    ...data.products.filter(
+                        (newProduct: Product) =>
+                            !prev.some(
+                                existing =>
+                                    existing.id ===
+                                    newProduct.id
+                            )
+                    ),
                 ]);
             }
+        } catch (error) {
+            console.error(error);
+
+            setMessages(prev => [
+                ...prev,
+                {
+                    sender: "bot",
+                    text: "Erro ao consultar assistente.",
+                },
+            ]);
         }
+    };
 
+    const resetChat = () => {
+        setMessages([
+            {
+                sender: "bot",
+                text: "Olá! Como posso ajudar você a encontrar um periférico?"
+            }
+        ]);
 
+        setRecommendedProducts([]);
+        setInput("");
     };
 
     return (
@@ -148,13 +161,24 @@ export default function AiChatModal({
                     style={{
                         padding: "16px",
                         borderBottom: "1px solid #ddd",
-                        display:"flex",
-                        flexDirection:"row",
-                        justifyContent:"space-between"
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between"
                     }}
                 >
                     <h2>Assistente de Compras</h2>
-                    <FullLogoIcon height={20} width={70} fill={"#0D3B5D"}/>
+                    <button
+                        onClick={resetChat}
+                        style={{
+                            border: "none",
+                            padding: "8px 12px",
+                            borderRadius: "8px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        Reiniciar
+                    </button>
+                    <FullLogoIcon height={20} width={70} fill={"#0D3B5D"} />
                 </div>
 
                 <div
@@ -195,66 +219,73 @@ export default function AiChatModal({
                             </div>
                         </div>
                     ))}
-
-                    {recommendedProduct && (
-                        <ProductCard
-                            id={recommendedProduct.id}
-                            key={recommendedProduct.id}
-                            image={recommendedProduct.type.toLowerCase() === "mouse"
+                    <div style={{ display: "flex", flexDirection: "row", gap: "5px" }}>
+                        {recommendedProducts.map(product => (
+                            <ProductCard
+                                key={product.id}
+                                id={product.id}
+                                image={
+                                    product.type.toLowerCase() === "mouse"
                                         ? mouse
-                                        : recommendedProduct.type.toLowerCase() === "keyboard"
+                                        : product.type.toLowerCase() ===
+                                            "keyboard"
                                             ? teclado
-                                            : fone}
-                            name={recommendedProduct.name}
-                            originalPrice={recommendedProduct.defaultPrice}
-                            promotionalPrice={recommendedProduct.promotionalPrice}
-                            onClose={onClose}
-                        />
-                    )}
+                                            : fone
+                                }
+                                name={product.name}
+                                originalPrice={product.defaultPrice}
+                                promotionalPrice={
+                                    product.promotionalPrice
+                                }
+                                onClose={onClose}
+                            />
+                        ))}
+                    </div>
+
+
                 </div>
 
-                {step < 3 && (
-                    <div
+
+                <div
+                    style={{
+                        borderTop: "1px solid #ddd",
+                        padding: "16px",
+                        display: "flex",
+                        gap: "8px"
+                    }}
+                >
+                    <input
+                        value={input}
+                        onChange={(e) =>
+                            setInput(e.target.value)
+                        }
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                sendMessage();
+                            }
+                        }}
                         style={{
-                            borderTop: "1px solid #ddd",
-                            padding: "16px",
-                            display: "flex",
-                            gap: "8px"
+                            flex: 1,
+                            padding: "10px",
+                            border: "1px solid #ccc",
+                            borderRadius: "8px"
+                        }}
+                    />
+
+                    <button
+                        onClick={sendMessage}
+                        style={{
+                            backgroundColor: "#2563eb",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "8px",
+                            padding: "10px 16px",
+                            cursor: "pointer"
                         }}
                     >
-                        <input
-                            value={input}
-                            onChange={(e) =>
-                                setInput(e.target.value)
-                            }
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    sendMessage();
-                                }
-                            }}
-                            style={{
-                                flex: 1,
-                                padding: "10px",
-                                border: "1px solid #ccc",
-                                borderRadius: "8px"
-                            }}
-                        />
-
-                        <button
-                            onClick={sendMessage}
-                            style={{
-                                backgroundColor: "#2563eb",
-                                color: "#fff",
-                                border: "none",
-                                borderRadius: "8px",
-                                padding: "10px 16px",
-                                cursor: "pointer"
-                            }}
-                        >
-                            Enviar
-                        </button>
-                    </div>
-                )}
+                        Enviar
+                    </button>
+                </div>
             </div>
         </ModalBody>
     );

@@ -37,13 +37,13 @@ const Footer = () => {
         </span>
       </div>
 
-      {showTypebot && (
+      {/* {showTypebot && (
         <iframe
           title="Typebot"
           src="https://typebot.co/product-recommendation-zv4zejp"
           style={{ border: "none", width: "100%", height: "600px" }}
         />
-      )}
+      )} */}
 
     </footer>
   )
