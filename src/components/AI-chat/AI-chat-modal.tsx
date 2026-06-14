@@ -8,6 +8,7 @@ import teclado from "@/media/images/teclado-generic.png"
 import fone from "@/media/images/fone-generic.png"
 import { CursorIcon } from "@/media/icon-component/CursorIcon";
 import { FullLogoIcon } from "@/media/icon-component/FullLogoIcon";
+import { Button } from "../button/Button";
 
 
 interface AiChatModalProps {
@@ -32,6 +33,7 @@ export default function AiChatModal({
     isOpen,
     onClose,
 }: AiChatModalProps) {
+    const [count, setCount] = useState<number>(0)
     const [messages, setMessages] = useState<Message[]>(([
         {
             sender: "bot",
@@ -53,6 +55,7 @@ export default function AiChatModal({
         useState<Product[]>([]);
 
     const sendMessage = async () => {
+        setCount( count + 1)
         setRecommendedProducts([])
         if (!input.trim()) return;
 
@@ -138,7 +141,7 @@ export default function AiChatModal({
                 text: "Olá! Como posso ajudar você a encontrar um periférico?"
             }
         ]);
-
+        setCount(0)
         setRecommendedProducts([]);
         setInput("");
     };
@@ -163,22 +166,10 @@ export default function AiChatModal({
                         borderBottom: "1px solid #ddd",
                         display: "flex",
                         flexDirection: "row",
-                        justifyContent: "space-between"
+                        justifyContent: "center"
                     }}
                 >
-                    <h2>Assistente de Compras</h2>
-                    <button
-                        onClick={resetChat}
-                        style={{
-                            border: "none",
-                            padding: "8px 12px",
-                            borderRadius: "8px",
-                            cursor: "pointer"
-                        }}
-                    >
-                        Reiniciar
-                    </button>
-                    <FullLogoIcon height={20} width={70} fill={"#0D3B5D"} />
+                    <FullLogoIcon height={40} width={120} fill={"#0D3B5D"} />
                 </div>
 
                 <div
@@ -254,37 +245,48 @@ export default function AiChatModal({
                         gap: "8px"
                     }}
                 >
-                    <input
-                        value={input}
-                        onChange={(e) =>
-                            setInput(e.target.value)
-                        }
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                                sendMessage();
-                            }
-                        }}
-                        style={{
-                            flex: 1,
-                            padding: "10px",
-                            border: "1px solid #ccc",
-                            borderRadius: "8px"
-                        }}
-                    />
+                    {
+                        count < 3 && (
+                            <>
+                                <input
+                                    value={input}
+                                    onChange={(e) =>
+                                        setInput(e.target.value)
+                                    }
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            sendMessage();
+                                        }
+                                    }}
+                                    spellCheck={false}
+                                    style={{
+                                        flex: 1,
+                                        padding: "10px",
+                                        border: "1px solid #ccc",
+                                        borderRadius: "8px"
+                                    }}
+                                />
 
-                    <button
-                        onClick={sendMessage}
-                        style={{
-                            backgroundColor: "#2563eb",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: "8px",
-                            padding: "10px 16px",
-                            cursor: "pointer"
-                        }}
-                    >
-                        Enviar
-                    </button>
+                                <button
+                                    onClick={sendMessage}
+                                    style={{
+                                        backgroundColor: "var(--dark-blue-100)",
+                                        color: "#fff",
+                                        border: "none",
+                                        borderRadius: "8px",
+                                        padding: "10px 16px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    <i className="ri-send-plane-fill" />
+                                </button>
+                            </>
+                        )
+                    }
+
+                    <Button height="46px" onClick={resetChat} maxWidth={count < 3 ? "44px" : "100%"} bgColor="#d4d4d4">
+                        <i className="ri-reset-left-line" />
+                    </Button>
                 </div>
             </div>
         </ModalBody>
