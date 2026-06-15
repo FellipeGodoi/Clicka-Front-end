@@ -46,7 +46,7 @@ const Header = () => {
 
         {/* Logo */}
         <div className={styles.logo} style={{ cursor: "pointer" }} onClick={() => navigateTo('/')}>
-          <FullLogoIcon height={40} width={125}fill={"#0D3B5D"}/>
+          <FullLogoIcon height={40} width={125} fill={"#0D3B5D"} />
         </div>
 
         {/* Busca */}
@@ -57,24 +57,29 @@ const Header = () => {
             type="text"
             value={search}
             onChange={(e: any) => setSearch(e.target.value)}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === 'Enter' && search.trim()) {
+                handleSearch()
+              }
+            }}
           />
 
-          <button 
-          disabled = {search === '' ? true : false }
-          onClick={handleSearch}
-          style={{
-            marginLeft: '8px',
-            padding: '10px 16px',
-            backgroundColor: search === '' ? '#498a72' : '#0D6444',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: search === '' ? 'not-allowed' : 'pointer',
-            fontWeight: 600
-          }}
-        >
-          BUSCAR
-        </button>
+          <button
+            disabled={search === '' ? true : false}
+            onClick={handleSearch}
+            style={{
+              marginLeft: '8px',
+              padding: '10px 16px',
+              backgroundColor: search === '' ? '#498a72' : '#0D6444',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: search === '' ? 'not-allowed' : 'pointer',
+              fontWeight: 600
+            }}
+          >
+            BUSCAR
+          </button>
         </div>
 
 

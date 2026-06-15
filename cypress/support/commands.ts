@@ -54,6 +54,12 @@
     cy.get('button[type="submit"]').click()
   }
 
+      export function alternativeLogin02() {
+    cy.get('[name="email"]').type('novoUsuario02@email.com')
+    cy.get('[name="password"]').type('123@Abcd')
+    cy.get('button[type="submit"]').click()
+  }
+
   export function randomName(prefix: string) {
     const random = Math.floor(Math.random() * 100000)
 
