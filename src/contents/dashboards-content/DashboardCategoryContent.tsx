@@ -15,6 +15,7 @@ import {
 import AdminContainer from '@/components/layout/AdminContainer'
 import { CustomTooltip } from './CustomTooltip'
 import { api } from '@/api/api'
+import { getSalesSummary, ProductSalesSummary } from '@/utils/chart-utils'
 
 export type DashboardGroupBy =
     | 'DAY'
@@ -47,6 +48,9 @@ const categories = [
 ]
 
 export default function DashboardCategoryContent() {
+    const [salesSummary, setSalesSummary] = useState<
+    ProductSalesSummary[]
+>([]);
 
     const DAY_RANGE = 30
 
@@ -180,6 +184,9 @@ function formatChartData(
         selectedCategories
     )
 )
+    setSalesSummary(
+    getSalesSummary(response.data)
+);
 
         } catch (error) {
 
@@ -440,6 +447,42 @@ const lineKeys = Array.from(
                     </LineChart>
 
                 </ResponsiveContainer>
+
+                <div
+    style={{
+        display: "flex",
+        gap: "16px",
+        flexWrap: "wrap",
+        marginBottom: "24px"
+    }}
+>
+    {salesSummary.map(item => (
+        <div
+            key={item.productId}
+            style={{
+                minWidth: "200px",
+                padding: "16px",
+                border: "1px solid #ddd",
+                borderRadius: "8px"
+            }}
+        >
+            <h4>{item.productName}</h4>
+
+            <p
+                style={{
+                    fontSize: "24px",
+                    fontWeight: "bold"
+                }}
+            >
+                {item.totalSold}
+            </p>
+
+            <span>
+                unidades vendidas
+            </span>
+        </div>
+    ))}
+</div>
 
             </div>
 

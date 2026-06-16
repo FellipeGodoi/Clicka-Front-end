@@ -36,3 +36,39 @@ export function formatChartData(
 
     return Array.from(periodsMap.values())
 }
+
+
+//----------------------------------------------------
+export interface ProductSalesSummary {
+    productId: string;
+    productName: string;
+    totalSold: number;
+}
+
+export function getSalesSummary(
+    data: SalesDashboardResponse[]
+): ProductSalesSummary[] {
+
+    const productsMap = new Map<
+        string,
+        ProductSalesSummary
+    >();
+
+    data.forEach(item => {
+
+        if (!productsMap.has(item.productId)) {
+            productsMap.set(item.productId, {
+                productId: item.productId,
+                productName: item.productName,
+                totalSold: 0
+            });
+        }
+
+        const product =
+            productsMap.get(item.productId)!;
+
+        product.totalSold += item.quantitySold;
+    });
+
+    return Array.from(productsMap.values());
+}

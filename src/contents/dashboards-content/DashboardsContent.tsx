@@ -17,13 +17,16 @@ import { ProductResponse } from '@/service/user/getProducts'
 import { DashboardGroupBy, getSalesDashboard, SalesDashboardResponse } from '@/service/admin/getSalesDashboard'
 import DashboardSearchInput from '@/components/inputs/dashboard-search-input/DashboardSearchInput'
 import AdminContainer from '@/components/layout/AdminContainer'
-import { formatChartData } from '@/utils/chart-utils'
+import { formatChartData, getSalesSummary, ProductSalesSummary } from '@/utils/chart-utils'
 import { CustomTooltip } from './CustomTooltip'
 
 export default function DashboardContent() {
 
     const DAY_RANGE = 30
     const [products, setProducts] = useState<ProductResponse[]>([])
+    const [salesSummary, setSalesSummary] = useState<
+    ProductSalesSummary[]
+>([]);
 
     const [startDate, setStartDate] = useState('2026-01-01')
     const [endDate, setEndDate] = useState('2026-12-01')
@@ -123,6 +126,10 @@ export default function DashboardContent() {
                     endDate,
                     groupBy
                 })
+
+            setSalesSummary(
+                getSalesSummary(response)
+            );
 
             const formatted =
                 formatChartData(response)
@@ -390,6 +397,42 @@ const lineKeys =
                         ))
                     }
                 </div>
+
+                <div
+    style={{
+        display: "flex",
+        gap: "16px",
+        flexWrap: "wrap",
+        marginBottom: "24px"
+    }}
+>
+    {salesSummary.map(item => (
+        <div
+            key={item.productId}
+            style={{
+                minWidth: "200px",
+                padding: "16px",
+                border: "1px solid #ddd",
+                borderRadius: "8px"
+            }}
+        >
+            <h4>{item.productName}</h4>
+
+            <p
+                style={{
+                    fontSize: "24px",
+                    fontWeight: "bold"
+                }}
+            >
+                {item.totalSold}
+            </p>
+
+            <span>
+                unidades vendidas
+            </span>
+        </div>
+    ))}
+</div>
             </div>
         </AdminContainer>
     )
