@@ -41,7 +41,7 @@ export const SearchContent = () => {
                     search: query,
                     minPrice: minPrice ? Number(minPrice) : undefined,
                     maxPrice: maxPrice ? Number(maxPrice) : undefined,
-                    type: type || undefined,
+                    type: selected || undefined,
                     includeOutOfStock,
                     orderByPrice,
                     size: 8,
@@ -57,7 +57,7 @@ export const SearchContent = () => {
 
 
         if (query) load()
-    }, [query, type, minPrice, maxPrice, orderByPrice, includeOutOfStock])
+    }, [query, selected, minPrice, maxPrice, orderByPrice, includeOutOfStock])
 
     const getProductImage = (name: string) => {
         const lower = name.toLowerCase()
@@ -98,10 +98,10 @@ export const SearchContent = () => {
                     />
                     <input
                         className={styles.input}
-                        placeholder="Preço mínimo"
+                        placeholder="Preço limite"
                         type="number"
-                        value={minPrice}
-                        onChange={(e) => setMinPrice(e.target.value)}
+                        value={maxPrice}
+                        onChange={(e) => setMaxPrice(e.target.value)}
                     />
                     <div className={styles.dropdown}>
                         <button onClick={() => setOrderOpen(!orderOpen)}>

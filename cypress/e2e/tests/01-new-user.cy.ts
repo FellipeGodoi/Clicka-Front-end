@@ -1,4 +1,4 @@
-import { alternativeLogin } from "../../support/commands";
+import { alternativeLogin, alternativeLogin02 } from "../../support/commands";
 const timer = 1000
 it('Plano B - create new user', () => {
     cy.visit('/auth');
@@ -16,13 +16,13 @@ it('Plano B - create new user', () => {
     cy.get('[name="documento"]').click();
     cy.wait(timer);
 
-    cy.get('[name="documento"]').type('123.123.333-55');
+    cy.get('[name="documento"]').type('123.123.222-01');
     cy.wait(timer);
 
     cy.get('[name="email"]').click();
     cy.wait(timer);
 
-    cy.get('[name="email"]').type('novoUsuario02@email.com');
+    cy.get('[name="email"]').type('novoUsuarioA@email.com');
     cy.wait(timer);
 
     cy.get('[name="senha"]').click();
@@ -41,7 +41,7 @@ it('Plano B - create new user', () => {
     cy.visit('/auth');
     cy.wait(timer);
     
-    alternativeLogin();
+    alternativeLogin02();
 
     
 

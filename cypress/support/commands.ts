@@ -55,7 +55,7 @@
   }
 
       export function alternativeLogin02() {
-    cy.get('[name="email"]').type('novoUsuario02@email.com')
+    cy.get('[name="email"]').type('novoUsuarioA@email.com')
     cy.get('[name="password"]').type('123@Abcd')
     cy.get('button[type="submit"]').click()
   }

@@ -406,32 +406,7 @@ const lineKeys =
         marginBottom: "24px"
     }}
 >
-    {salesSummary.map(item => (
-        <div
-            key={item.productId}
-            style={{
-                minWidth: "200px",
-                padding: "16px",
-                border: "1px solid #ddd",
-                borderRadius: "8px"
-            }}
-        >
-            <h4>{item.productName}</h4>
 
-            <p
-                style={{
-                    fontSize: "24px",
-                    fontWeight: "bold"
-                }}
-            >
-                {item.totalSold}
-            </p>
-
-            <span>
-                unidades vendidas
-            </span>
-        </div>
-    ))}
 </div>
             </div>
         </AdminContainer>
